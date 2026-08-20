@@ -1,0 +1,96 @@
+<!doctype html>
+<!--
+  `lang` est reecrit au demarrage par src/i18n : la valeur ici est celle du
+  premier rendu, avant que la langue du visiteur soit connue. Les meta, elles,
+  restent en francais quoi qu'il arrive : les robots sociaux (X, Slack, Discord)
+  n'executent pas de JavaScript, donc l'apercu partage est toujours celui du
+  HTML servi. Une seule langue a choisir, autant que ce soit celle de l'auteur.
+-->
+<html lang="fr">
+  <head>
+    <!-- doit tenir dans les 1024 premiers octets, donc en premier -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>tibsy, avatar SVG animé</title>
+    <!--
+      « tibsy » est le nom du produit ; « l'avatar du bot de x.ai » est la
+      matiere reproduite. Les deux doivent rester distincts : le projet n'est
+      pas edite par x.ai, et il ne reproduit pas autre chose que son avatar.
+    -->
+    <meta
+      name="description"
+      content="tibsy recrée en SVG animé l'avatar du bot de x.ai : une forme noire qui morphe entre 14 états, relevés au pixel sur la vidéo. Sans librairie d'animation."
+    />
+
+    <!--
+      Pas de <meta name="robots" content="index, follow"> : c'est la valeur par
+      defaut, et Google la documente comme sans effet. Cette balise ne sert qu'a
+      INTERDIRE quelque chose.
+    -->
+
+    <!-- Open Graph : attribut `property`, alors que les balises X prennent `name` -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="tibsy, avatar SVG animé" />
+    <meta
+      property="og:description"
+      content="D'après l'avatar du bot de x.ai : une forme noire qui morphe entre 14 états, relevés au pixel sur la vidéo de référence."
+    />
+    <meta property="og:site_name" content="tibsy" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+
+    <!--
+      `twitter:card` suffit : X reprend og:title, og:description et og:image.
+      Les dupliquer en twitter:* n'ajoute rien.
+    -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!--
+      URL ABSOLUE obligatoire (protocole + hote) : une URL relative est ignoree
+      par les robots sociaux, qui ne connaissent pas la page d'ou ils viennent.
+      Les trois URL ci-dessous sont donc a reprendre si le domaine change, elles
+      ne se deduisent de rien.
+    -->
+    <link rel="canonical" href="https://bloub.vercel.app/" />
+    <meta property="og:url" content="https://bloub.vercel.app/" />
+    <meta property="og:image" content="https://bloub.vercel.app/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="L'avatar noir du bot et le logotype TIBSY, sur fond clair"
+    />
+
+    <!--
+      Le `.ico` d'abord et le SVG apres : a pertinence egale les navigateurs
+      retiennent le DERNIER, et on veut le vectoriel quand il est compris.
+      Le `.ico` reste necessaire en 2026 : Safari ne lit le SVG qu'a partir de
+      la version 26, et iOS pas du tout avant 18.7.
+
+      Il embarque 16, 32 et 48 (48 pour les onglets a fort zoom et le raccourci
+      Windows), chaque taille rendue depuis le SVG plutot que reechantillonnee.
+      Les trois tailles sont declarees : avec `sizes="32x32"` seul, un
+      navigateur qui cherche une icone de 48 reechantillonne le 32 au lieu
+      d'ouvrir l'image de 48 qui est dans le fichier. Le `.ico` ignore
+      `prefers-color-scheme`, il porte la seule variante claire (corps #0a0a0c,
+      yeux troues), d'ou le SVG juste apres, qui lui s'inverse.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- iOS aplatit la transparence en noir : celui-la est opaque, fond #f9f9f9 -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- pas de site.webmanifest : il ne sert qu'a l'installation PWA, et
+         couterait trois icones de plus pour aucun gain de referencement -->
+
+    <meta name="theme-color" content="#f9f9f9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0c" media="(prefers-color-scheme: dark)" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

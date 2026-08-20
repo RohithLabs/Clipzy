@@ -1,0 +1,18 @@
+name: ci
+# `push` limite a main, sinon chaque branche de PR declenche DEUX fois le meme job — une
+# fois pour le push, une fois pour la PR — sur exactement le meme commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  verifie:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm test
