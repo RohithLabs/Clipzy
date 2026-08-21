@@ -1,49 +1,86 @@
 @import 'tailwindcss';
 
+/* ==========================================================================
+   Fontshare Typography Integration
+   ========================================================================== */
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/GeneralSans-Regular.woff2') format('woff2'),
+       url('/fonts/GeneralSans-Regular.woff') format('woff');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('/fonts/GeneralSans-Light.woff2') format('woff2'),
+       url('/fonts/GeneralSans-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pilcrow Rounded';
+  src: url('/fonts/PilcrowRounded-Regular.woff2') format('woff2'),
+       url('/fonts/PilcrowRounded-Regular.woff') format('woff');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Melodrama';
+  src: url('/fonts/Melodrama-Medium.woff2') format('woff2'),
+       url('/fonts/Melodrama-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Britney';
+  src: url('/fonts/Britney-Regular.woff2') format('woff2'),
+       url('/fonts/Britney-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Trench Slab';
+  src: url('/fonts/TrenchSlab-Medium.woff2') format('woff2'),
+       url('/fonts/TrenchSlab-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand Fontshare';
+  src: url('/fonts/Quicksand-Medium.woff2') format('woff2'),
+       url('/fonts/Quicksand-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Fond releve au pixel sur la video de reference. */
   --paper: #f9f9f9;
-  /*
-   * Couleur principale de l'INTERFACE : un bleu nuit choisi, pas releve. Le
-   * noir de la video, lui, n'a pas bouge — c'est celui du bot, dans skins.ts
-   * (`encre`, #0a0a0c). Les deux ne doivent pas etre confondus : changer
-   * celle-ci retouche le decor, changer l'autre casse la ressemblance.
-   */
   --ink: #17203a;
   --line: #e3e5ea;
   --muted: #6e7382;
-  /* Rouge d'interface pour les actions destructrices — choisi, comme --ink. */
   --danger: #d63c34;
 
-  /**
-   * Hauteur de la barre de montage. Elle est fixee en bas, donc c'est la scene
-   * qui lui reserve sa place — dans les DEUX vues, sinon l'avatar centre change
-   * de position en passant a la personnalisation.
-   */
   --timeline: 236px;
-
-  /**
-   * Duree et courbe du passage d'une vue a l'autre : le glissement de la scene et
-   * la croissance de la boule. Le tour du regard, lui, a sa propre duree
-   * (`TURN_TIME` de `src/ui/gaze.ts`), volontairement un peu plus longue — les
-   * yeux finissent de se poser apres que la boule a fini de grandir, ce qui fait
-   * lire les deux comme un seul mouvement qui se termine. Ease-out sans
-   * depassement, comme tout le reste du projet.
-   */
   --bascule: 1s cubic-bezier(0.22, 1, 0.36, 1);
+  --font-body: 'General Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-brand: 'Pilcrow Rounded', 'General Sans', sans-serif;
 }
 
-/*
- * La meme barre, sur une fenetre etroite : 236 px, c'est 29 % d'un ecran de
- * telephone, et la hauteur qu'elle prend est retranchee de tout ce qui reste.
- * 200 px laissent la regle (28 px) et des cartes de 64 px, soit la vignette a sa
- * taille maximale — en dessous les cartes ne montrent plus rien.
- *
- * La variable est lue par la reserve de la scene et par le plafond de l'avatar,
- * qui valent a toutes les largeurs. Les calages fins de `.barre-export` et des
- * colonnes, eux, sont dans la requete `>= 64rem` : ils ne voient jamais cette
- * valeur.
- */
 @media (width < 64rem) {
   :root {
     --timeline: 200px;
@@ -54,9 +91,13 @@ html,
 body,
 #app {
   height: 100%;
-  font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .font-heading, .wordmark {
+  font-family: var(--font-brand);
 }
 
 /*

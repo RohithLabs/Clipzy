@@ -12,6 +12,12 @@ import Timeline from '@/components/Timeline.vue'
 import Interactive3DShowcase from '@/components/Interactive3DShowcase.vue'
 import ComboPanel from '@/components/ComboPanel.vue'
 import ReelStudio from '@/components/ReelStudio.vue'
+import ThreeCanvas from '@/components/ThreeCanvas.vue'
+import PhysicsPlayground from '@/components/PhysicsPlayground.vue'
+import VoiceBotStudio from '@/components/VoiceBotStudio.vue'
+import PresetsPanel from '@/components/PresetsPanel.vue'
+import type { CharacterPreset } from '@/bot/presets'
+import confetti from 'canvas-confetti'
 import { sfx } from '@/audio/sfx'
 import type { HatId, GlassesId, PropId, AuraId } from '@/bot/accessories'
 import { nomDeCycle, t } from '@/i18n'
@@ -452,7 +458,18 @@ const nue = computed(() => intro.value && block.value < POSE_AT)
  * droite qu'on la fait glisser a sa place.
  */
 const gauche = computed(() => !nue.value && view.value === 'reglages')
-const droite = computed(() => !nue.value && view.value !== 'reglages' && view.value !== 'lab3d' && view.value !== 'combos' && view.value !== 'reel')
+const droite = computed(
+  () =>
+    !nue.value &&
+    view.value !== 'reglages' &&
+    view.value !== 'lab3d' &&
+    view.value !== 'combos' &&
+    view.value !== 'reel' &&
+    view.value !== 'webgl3d' &&
+    view.value !== 'physics' &&
+    view.value !== 'voice' &&
+    view.value !== 'presets'
+)
 
 /* ------------------------------------------------------------------- skins */
 
@@ -516,6 +533,23 @@ function onLoadCombo({ name, blocks }: { name: string; blocks: Block[] }) {
   view.value = 'animations'
   playing.value = true
   sfx.playPowerCharge()
+}
+
+function onApplyPreset(preset: CharacterPreset) {
+  color.value = preset.color
+  shape.value = preset.shape
+  expression.value = preset.expression
+  hat.value = preset.hat
+  glasses.value = preset.glasses
+  prop.value = preset.prop
+  aura.value = preset.aura
+  if (preset.featureSize) featureSize.value = preset.featureSize
+  if (preset.eyebrows) eyebrows.value = preset.eyebrows
+  if (preset.nose) nose.value = preset.nose
+  if (preset.cheeks) cheeks.value = preset.cheeks
+  if (preset.mouth) mouth.value = preset.mouth
+  sfx.playChime()
+  confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } })
 }
 
 /**
@@ -913,6 +947,52 @@ watch(
         :avatar-prop="prop"
         :avatar-aura="aura"
       />
+    </div>
+
+    <!-- Section 3D WebGL Three.js Studio -->
+    <div
+      v-else-if="view === 'webgl3d' && !preview"
+      class="webgl-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <ThreeCanvas />
+    </div>
+
+    <!-- Section Physics & Toss Playground -->
+    <div
+      v-else-if="view === 'physics' && !preview"
+      class="physics-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <PhysicsPlayground
+        :avatar-color="color"
+        :avatar-shape="typeof shape === 'string' ? shape : 'cercle'"
+        :avatar-hat="hat"
+        :avatar-glasses="glasses"
+        :avatar-prop="prop"
+        :avatar-aura="aura"
+      />
+    </div>
+
+    <!-- Section Voice & Audio Lipsync Studio -->
+    <div
+      v-else-if="view === 'voice' && !preview"
+      class="voice-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <VoiceBotStudio
+        :avatar-color="color"
+        :avatar-shape="typeof shape === 'string' ? shape : 'cercle'"
+        :avatar-hat="hat"
+        :avatar-glasses="glasses"
+        :avatar-prop="prop"
+        :avatar-aura="aura"
+      />
+    </div>
+
+    <!-- Section Character Presets & Community Hub -->
+    <div
+      v-else-if="view === 'presets' && !preview"
+      class="presets-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <PresetsPanel @apply-preset="onApplyPreset" />
     </div>
 
     <!-- Section dédiée au développement et test des éléments 3D interactifs -->
