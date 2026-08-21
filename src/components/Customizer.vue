@@ -51,7 +51,7 @@ const EYE_PREVIEW = {
 </script>
 
 <template>
-  <div>
+  <div class="customizer-card p-4 sm:p-5 rounded-3xl border border-[var(--line)] bg-white/85 dark:bg-zinc-900/85 backdrop-blur-xl shadow-xs mb-12">
     <h2 class="text-sm font-semibold">{{ t('panel.shape') }}</h2>
     <div class="mt-2 grid grid-cols-4 gap-1.5">
       <BotTile
@@ -317,12 +317,12 @@ const EYE_PREVIEW = {
     <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
       <span>👑</span> {{ t('panel.hats') || 'Hats & Headwear' }}
     </h2>
-    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+    <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
       <button
         v-for="h in HATS"
         :key="h.id"
         type="button"
-        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border p-2 text-xs transition min-h-[58px]"
         :class="
           hat === h.id
             ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
@@ -330,8 +330,8 @@ const EYE_PREVIEW = {
         "
         @click="hat = h.id"
       >
-        <span class="text-base">{{ h.icon }}</span>
-        <span class="truncate text-[11px]">{{ h.label }}</span>
+        <span class="text-lg">{{ h.icon }}</span>
+        <span class="text-[10px] text-center leading-tight">{{ h.label }}</span>
       </button>
     </div>
 
@@ -339,12 +339,12 @@ const EYE_PREVIEW = {
     <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
       <span>🕶️</span> {{ t('panel.glasses') || 'Glasses & Shades' }}
     </h2>
-    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+    <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
       <button
         v-for="g in GLASSES"
         :key="g.id"
         type="button"
-        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border p-2 text-xs transition min-h-[58px]"
         :class="
           glasses === g.id
             ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
@@ -352,8 +352,8 @@ const EYE_PREVIEW = {
         "
         @click="glasses = g.id"
       >
-        <span class="text-base">{{ g.icon }}</span>
-        <span class="truncate text-[11px]">{{ g.label }}</span>
+        <span class="text-lg">{{ g.icon }}</span>
+        <span class="text-[10px] text-center leading-tight">{{ g.label }}</span>
       </button>
     </div>
 
@@ -361,12 +361,12 @@ const EYE_PREVIEW = {
     <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
       <span>🎮</span> {{ t('panel.props') || 'Props & Items' }}
     </h2>
-    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+    <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
       <button
         v-for="p in PROPS"
         :key="p.id"
         type="button"
-        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border p-2 text-xs transition min-h-[58px]"
         :class="
           prop === p.id
             ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
@@ -374,8 +374,8 @@ const EYE_PREVIEW = {
         "
         @click="prop = p.id"
       >
-        <span class="text-base">{{ p.icon }}</span>
-        <span class="truncate text-[11px]">{{ p.label }}</span>
+        <span class="text-lg">{{ p.icon }}</span>
+        <span class="text-[10px] text-center leading-tight">{{ p.label }}</span>
       </button>
     </div>
 
@@ -383,12 +383,12 @@ const EYE_PREVIEW = {
     <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
       <span>✨</span> {{ t('panel.auras') || 'Aura & Energy FX' }}
     </h2>
-    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+    <div class="mt-2 grid grid-cols-3 gap-2" role="radiogroup">
       <button
         v-for="a in AURAS"
         :key="a.id"
         type="button"
-        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        class="flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border p-2 text-xs transition min-h-[58px]"
         :class="
           aura === a.id
             ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
@@ -396,8 +396,8 @@ const EYE_PREVIEW = {
         "
         @click="aura = a.id"
       >
-        <span class="text-base">{{ a.icon }}</span>
-        <span class="truncate text-[11px]">{{ a.label }}</span>
+        <span class="text-lg">{{ a.icon }}</span>
+        <span class="text-[10px] text-center leading-tight">{{ a.label }}</span>
       </button>
     </div>
 

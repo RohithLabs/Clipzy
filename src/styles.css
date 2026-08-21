@@ -401,28 +401,16 @@ h1, h2, h3, .font-heading, .wordmark {
 
   .scene {
     display: grid;
-    grid-template-columns: 0 minmax(0, 1fr) 20rem;
+    grid-template-columns: 0 minmax(0, 1fr) 23rem;
     column-gap: 2.5rem;
+    padding-top: 5.5rem;
     transition: grid-template-columns var(--bascule);
-    /*
-     * Bornee a la fenetre. C'est ce qui donne aux panneaux une hauteur CONTRAINTE,
-     * sans quoi leur `overflow-y: auto` ne sert a rien : une piste de grille sans
-     * plafond prend la hauteur de son contenu, la boite ne deborde jamais d'
-     * elle-meme, et le panneau se retrouvait coupe par le rognage de `#app` sans
-     * pouvoir defiler. Sur une fenetre basse, c'est le panneau qui defile.
-     */
     max-height: 100%;
-    /*
-     * Piste unique DEFINIE, et non automatique. Une piste automatique prend la
-     * hauteur de son contenu et ignore le plafond du conteneur : le panneau
-     * gardait ses 773 px dans une fenetre de 620, se faisait rogner par `#app` et
-     * n'avait rien a defiler puisque sa boite ne debordait pas d'elle-meme.
-     */
     grid-template-rows: minmax(0, 1fr);
   }
 
   .scene--gauche {
-    grid-template-columns: 20rem minmax(0, 1fr) 0;
+    grid-template-columns: 23rem minmax(0, 1fr) 0;
   }
 
   /*

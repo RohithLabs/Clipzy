@@ -9,11 +9,8 @@ import GifDialog from '@/components/GifDialog.vue'
 import Settings from '@/components/Settings.vue'
 import SideRail, { type ViewId } from '@/components/SideRail.vue'
 import Timeline from '@/components/Timeline.vue'
-import Interactive3DShowcase from '@/components/Interactive3DShowcase.vue'
 import ComboPanel from '@/components/ComboPanel.vue'
 import ReelStudio from '@/components/ReelStudio.vue'
-import ThreeCanvas from '@/components/ThreeCanvas.vue'
-import PhysicsPlayground from '@/components/PhysicsPlayground.vue'
 import VoiceBotStudio from '@/components/VoiceBotStudio.vue'
 import PresetsPanel from '@/components/PresetsPanel.vue'
 import type { CharacterPreset } from '@/bot/presets'
@@ -462,11 +459,8 @@ const droite = computed(
   () =>
     !nue.value &&
     view.value !== 'reglages' &&
-    view.value !== 'lab3d' &&
     view.value !== 'combos' &&
     view.value !== 'reel' &&
-    view.value !== 'webgl3d' &&
-    view.value !== 'physics' &&
     view.value !== 'voice' &&
     view.value !== 'presets'
 )
@@ -929,7 +923,7 @@ watch(
     <!-- Section Combos Hub -->
     <div
       v-if="view === 'combos' && !preview"
-      class="combos-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+      class="combos-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 pt-20 lg:pt-24 pb-24"
     >
       <ComboPanel @load-combo="onLoadCombo" />
     </div>
@@ -937,32 +931,9 @@ watch(
     <!-- Section Reel Studio -->
     <div
       v-else-if="view === 'reel' && !preview"
-      class="reel-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+      class="reel-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 pt-20 lg:pt-24 pb-24"
     >
       <ReelStudio
-        :avatar-color="color"
-        :avatar-shape="typeof shape === 'string' ? shape : 'cercle'"
-        :avatar-hat="hat"
-        :avatar-glasses="glasses"
-        :avatar-prop="prop"
-        :avatar-aura="aura"
-      />
-    </div>
-
-    <!-- Section 3D WebGL Three.js Studio -->
-    <div
-      v-else-if="view === 'webgl3d' && !preview"
-      class="webgl-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
-    >
-      <ThreeCanvas />
-    </div>
-
-    <!-- Section Physics & Toss Playground -->
-    <div
-      v-else-if="view === 'physics' && !preview"
-      class="physics-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
-    >
-      <PhysicsPlayground
         :avatar-color="color"
         :avatar-shape="typeof shape === 'string' ? shape : 'cercle'"
         :avatar-hat="hat"
@@ -975,7 +946,7 @@ watch(
     <!-- Section Voice & Audio Lipsync Studio -->
     <div
       v-else-if="view === 'voice' && !preview"
-      class="voice-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+      class="voice-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 pt-20 lg:pt-24 pb-24"
     >
       <VoiceBotStudio
         :avatar-color="color"
@@ -990,30 +961,16 @@ watch(
     <!-- Section Character Presets & Community Hub -->
     <div
       v-else-if="view === 'presets' && !preview"
-      class="presets-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+      class="presets-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 pt-20 lg:pt-24 pb-24"
     >
       <PresetsPanel @apply-preset="onApplyPreset" />
     </div>
 
-    <!-- Section dédiée au développement et test des éléments 3D interactifs -->
-    <div
-      v-else-if="view === 'lab3d' && !preview"
-      class="lab3d-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
-    >
-      <Interactive3DShowcase />
-    </div>
-
     <div
       v-else
-      class="scene min-h-full items-stretch justify-center p-8 max-lg:flex max-lg:flex-col max-lg:gap-10 max-lg:px-5"
+      class="scene min-h-full items-stretch justify-center p-8 pt-20 sm:pt-20 max-lg:flex max-lg:flex-col max-lg:gap-10 max-lg:px-5"
       :class="[
         !preview && view === 'animations' && 'pb-[calc(var(--timeline)_+_1rem)]',
-        // Sous 64rem le rail passe en bande HAUTE (cf. `SideRail`), et il flotte
-        // comme il flottait a gauche : la scene doit lui reserver sa hauteur,
-        // sinon le premier element de la pile lui passe dessous. Sauf en apercu,
-        // le seul cas ou le rail est DEMONTE — y reserver sa place descendait
-        // l'avatar de 80 px pour rien.
-        !preview && 'max-lg:pt-20',
         nue || preview ? 'scene--seule' : view === 'reglages' && 'scene--gauche'
       ]"
     >
@@ -1033,11 +990,11 @@ watch(
 
       <!-- scene -->
       <main
-        class="scene__avatar relative flex flex-1 items-center justify-center max-lg:order-1 max-lg:flex-col max-lg:gap-4 lg:self-start"
+        class="scene__avatar relative flex flex-1 items-center justify-center max-lg:order-1 max-lg:flex-col max-lg:gap-4 lg:self-center"
         :class="
           preview
             ? 'lg:min-h-[calc(100dvh_-_4rem)]'
-            : 'lg:min-h-[calc(100dvh_-_3rem_-_var(--timeline))]'
+            : 'lg:min-h-[calc(100dvh_-_6rem_-_var(--timeline))]'
         "
       >
         <!-- l'avatar se met a la hauteur disponible -->
@@ -1046,7 +1003,7 @@ watch(
           :class="[
             preview
               ? 'max-w-[min(560px,calc(100dvh_-_6rem))]'
-              : 'max-w-[min(460px,calc(100dvh_-_var(--timeline)_-_7rem))]',
+              : 'max-w-[min(460px,calc(100dvh_-_var(--timeline)_-_8rem))]',
             nue && 'avatar--intro',
             view === 'reglages' && !preview && 'avatar--geant'
           ]"
@@ -1103,7 +1060,7 @@ watch(
 
       <aside
         v-if="!preview"
-        class="panneau scene__droite w-full lg:w-80 lg:shrink-0"
+        class="panneau scene__droite w-full lg:w-96 lg:shrink-0 max-h-[calc(100dvh_-_7rem)] overflow-y-auto pb-12 pr-1 scrollbar-thin"
         :class="droite ? 'panneau--ouvert max-lg:order-2' : 'max-lg:hidden'"
       >
         <!-- palette : Animations 3D et séquences -->

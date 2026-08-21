@@ -23,8 +23,6 @@ const NAV_ITEMS: Array<{ id: ViewId; label: string; icon: string; badge?: string
   { id: 'personnaliser', label: 'Studio', icon: '🎨' },
   { id: 'combos', label: 'Combos', icon: '⚡', badge: 'New' },
   { id: 'reel', label: 'Reel 9:16', icon: '📱', badge: 'Pro' },
-  { id: 'webgl3d', label: '3D WebGL', icon: '🌐' },
-  { id: 'physics', label: 'Physics', icon: '🏓' },
   { id: 'voice', label: 'Voice', icon: '🎙️' },
   { id: 'presets', label: 'Presets', icon: '👥' },
   { id: 'animations', label: 'Timeline', icon: '🎬' },
