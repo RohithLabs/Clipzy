@@ -5,7 +5,6 @@ import type { ViewId } from './SideRail.vue'
 
 const props = defineProps<{
   activeView: ViewId
-  isDark?: boolean
   isAudioMuted?: boolean
 }>()
 

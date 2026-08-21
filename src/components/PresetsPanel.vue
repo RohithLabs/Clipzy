@@ -177,7 +177,7 @@ function handleFileImport(e: Event) {
             :prop="preset.prop"
             :aura="preset.aura"
             :play-sounds="false"
-            idle-animation="float"
+            :idle-animation="'float'"
           />
         </div>
 
