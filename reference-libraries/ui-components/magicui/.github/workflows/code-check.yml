@@ -1,0 +1,262 @@
+name: Code check
+
+on:
+  pull_request:
+    branches: ["*"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: pnpm lint
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: pnpm lint
+        run: |
+          pnpm lint || {
+            echo "::error::Lint errors found. Run 'pnpm lint:fix' locally, fix any remaining errors, then commit."
+            exit 1
+          }
+
+  format:
+    runs-on: ubuntu-latest
+    name: pnpm format:check
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: pnpm format:check
+        run: |
+          pnpm format:check || {
+            echo "::error::Formatting issues found. Run 'pnpm format:fix' locally, then commit."
+            exit 1
+          }
+
+  tsc:
+    runs-on: ubuntu-latest
+    name: pnpm typecheck
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+
+      - run: pnpm typecheck
+
+  registry-deps:
+    runs-on: ubuntu-latest
+    name: pnpm registry-deps:check
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: pnpm registry-deps:check
+        run: |
+          pnpm registry-deps:check || {
+            echo "::error::Registry example dependencies are out of sync. Run 'pnpm registry-deps:fix && pnpm build:registry', then commit registry-examples.ts along with the generated files."
+            exit 1
+          }
+
+  build:
+    runs-on: ubuntu-latest
+    name: pnpm build
+    steps:
+      - uses: actions/checkout@v6
+
+      # pnpm must be installed before setup-node so its built-in pnpm cache works
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: apps/www/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/www/**/*.[jt]s', 'apps/www/**/*.[jt]sx', 'apps/www/**/*.mdx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_APP_URL: https://magicui.design
+
+  registry-drift:
+    runs-on: ubuntu-latest
+    name: registry artifact drift check
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install dependencies
+        run: pnpm install
+
+      # build:registry must stay regeneration-only: repo-wide lint/format fixes
+      # here could fail on unrelated errors and mask the real drift result.
+      - name: Build registry artifacts
+        run: pnpm build:registry
+
+      - name: Verify registry artifacts are committed
+        run: |
+          CHANGED_FILES="$(git status --porcelain --untracked-files=all -- \
+            apps/www/registry.json \
+            apps/www/registry/__index__.tsx \
+            apps/www/public/registry.json \
+            apps/www/public/r \
+            apps/www/public/llms.txt \
+            apps/www/public/llms-full.txt)"
+
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "::error::Registry artifacts are out of date. Run 'pnpm build:registry', then commit the generated files."
+            echo "Changed files:"
+            printf '%s\n' "$CHANGED_FILES"
+            exit 1
+          fi

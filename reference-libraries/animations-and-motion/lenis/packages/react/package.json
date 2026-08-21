@@ -1,0 +1,8 @@
+{
+  "name": "lenis-react",
+  "type": "module",
+  "devDependencies": {
+    "@types/react": "^19.0.7",
+    "react": "^19.0.0"
+  }
+}

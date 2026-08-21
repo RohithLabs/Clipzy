@@ -1,0 +1,18 @@
+/* Base component styles */
+.fieldset {
+  @apply flex flex-col gap-6;
+  /* fix flexbox issue in Safari when fieldset with legend is inside a flexbox */
+  @apply shrink grow basis-0;
+}
+
+.fieldset__legend {
+  @apply text-base font-medium text-foreground;
+}
+
+.fieldset__field_group {
+  @apply w-full space-y-4;
+}
+
+.fieldset__actions {
+  @apply flex items-center gap-2 pt-1;
+}

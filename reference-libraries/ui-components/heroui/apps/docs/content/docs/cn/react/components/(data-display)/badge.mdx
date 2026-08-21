@@ -1,0 +1,187 @@
+---
+title: Badge 徽章
+description: 相对其他元素定位的小型指示器，常用于通知数量、状态点与标签
+
+links:
+  source: badge/badge.tsx
+  styles: badge.css
+  storybook: Components/Data Display/Badge
+  figma: true
+---
+
+## 用法
+
+```tsx
+import { Badge } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="badge-basic"
+/>
+
+## 组件结构
+
+Badge 通过 `Badge.Anchor` 相对其他元素定位。纯文本子节点会自动包裹在 `<Badge.Label>` 中。
+
+> 独立标签用法请使用 [Chip](/docs/react/components/chip) 组件。
+
+```tsx
+<Badge.Anchor>
+  <Avatar />
+  <Badge color="danger">5</Badge>
+</Badge.Anchor>
+```
+
+## 示例
+
+### 变体
+
+<ComponentPreview
+  name="badge-variants"
+/>
+
+### 尺寸
+
+<ComponentPreview
+  name="badge-sizes"
+/>
+
+### 颜色
+
+<ComponentPreview
+  name="badge-colors"
+/>
+
+### 徽章位置
+
+<ComponentPreview
+  name="badge-placements"
+/>
+
+### 点状徽标
+
+空徽章作为状态指示器，适用于在线/离线或活动信号。
+
+<ComponentPreview
+  name="badge-dot"
+/>
+
+### 带内容
+
+Badge 支持文本、数字与图标。无子节点时渲染为点状指示器。
+
+<ComponentPreview
+  name="badge-with-content"
+/>
+
+## 自定义样式
+
+### Tailwind CSS
+
+<ComponentPreview name="badge-custom-styles" />
+
+### 全局 CSS
+
+可使用 `@layer components` 指令自定义 Badge 组件类。
+[了解更多](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)。
+
+```css
+@layer components {
+  .badge {
+    @apply rounded-full text-xs;
+  }
+
+  .badge__label {
+    @apply font-semibold;
+  }
+
+  .badge--accent {
+    @apply shadow-sm;
+  }
+}
+```
+
+## 样式参考
+
+HeroUI 遵循 [BEM](https://getbem.com/) 方法论，确保组件变体与状态可复用且易于自定义。
+
+### CSS 类
+
+Badge 组件使用以下 CSS 类（[查看源码样式](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/badge.css)）：
+
+#### 基础类 [!toc]
+- `.badge` - 基础徽章容器样式
+- `.badge__label` - 标签文本 slot 样式
+- `.badge-anchor` - 锚定元素的定位包装器
+
+#### 颜色类 [!toc]
+- `.badge--accent` - 强调色变体
+- `.badge--danger` - 危险色变体
+- `.badge--default` - 默认色变体
+- `.badge--success` - 成功色变体
+- `.badge--warning` - 警告色变体
+
+#### 变体类 [!toc]
+- `.badge--primary` - 填充背景的主变体
+- `.badge--secondary` - 默认背景的次变体
+- `.badge--soft` - 浅色背景的 soft 变体
+
+#### 尺寸类 [!toc]
+- `.badge--sm` - 小尺寸
+- `.badge--md` - 中尺寸（默认）
+- `.badge--lg` - 大尺寸
+
+#### 位置类 [!toc]
+- `.badge--top-right` - 右上角（默认）
+- `.badge--top-left` - 左上角
+- `.badge--bottom-right` - 右下角
+- `.badge--bottom-left` - 左下角
+
+#### 复合变体类 [!toc]
+
+Badge 支持组合变体与颜色类（如 `.badge--primary.badge--accent`）。以下组合有默认样式：
+
+**Primary Variants:**
+- `.badge--primary.badge--accent` - 填充背景的 primary accent
+- `.badge--primary.badge--default` - 填充背景的 primary default
+- `.badge--primary.badge--success` - 填充背景的 primary success
+- `.badge--primary.badge--warning` - 填充背景的 primary warning
+- `.badge--primary.badge--danger` - 填充背景的 primary danger
+
+**Soft Variants:**
+- `.badge--soft.badge--accent` - 浅色背景的 soft accent
+- `.badge--soft.badge--default` - 浅色背景的 soft default
+- `.badge--soft.badge--success` - 浅色背景的 soft success
+- `.badge--soft.badge--warning` - 浅色背景的 soft warning
+- `.badge--soft.badge--danger` - 浅色背景的 soft danger
+
+## API 参考
+
+### Badge
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `children` | `React.ReactNode` | - | 徽章内容（文本、数字或图标）。省略时渲染为点 |
+| `className` | `string` | - | 根元素附加 CSS 类 |
+| `color` | `"default" \| "accent" \| "success" \| "warning" \| "danger"` | `"default"` | 徽章颜色变体 |
+| `variant` | `"primary" \| "secondary" \| "soft"` | `"primary"` | 视觉样式变体 |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 徽章尺寸 |
+| `placement` | `"top-right" \| "top-left" \| "bottom-right" \| "bottom-left"` | `"top-right"` | 相对锚点的位置 |
+
+### Badge.Anchor
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `children` | `React.ReactNode` | - | 锚定元素及 Badge 本身 |
+| `className` | `string` | - | 锚点包装器附加 CSS 类 |
+
+### Badge.Label
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `children` | `React.ReactNode` | - | 标签文本内容 |
+| `className` | `string` | - | 标签 slot 附加 CSS 类 |
+
+## 相关组件
+
+<RelatedComponents component="badge" />

@@ -1,0 +1,148 @@
+---
+title: Confetti
+date: 2024-05-26
+description: Confetti animations are best used to delight your users when something special happens
+author: Bankkroll
+published: true
+---
+
+<ComponentPreview name="confetti-demo" />
+
+## Installation
+
+<Tabs defaultValue="cli">
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add @magicui/confetti
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install canvas-confetti
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="confetti" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</Tabs>
+
+## Examples
+
+### Basic
+
+<ComponentPreview name="confetti-basic-cannon" />
+
+### Random Direction
+
+<ComponentPreview name="confetti-random-direction" />
+
+### Fireworks
+
+<ComponentPreview name="confetti-fireworks" />
+
+### Side Cannons
+
+<ComponentPreview name="confetti-side-cannons" />
+
+### Stars
+
+<ComponentPreview name="confetti-stars" />
+
+### Custom Shapes
+
+<ComponentPreview name="confetti-custom-shapes" />
+
+### Emoji
+
+<ComponentPreview name="confetti-emoji" />
+
+### Usage
+
+```tsx showLineNumbers
+import { useRef } from "react"
+
+import { Confetti, type ConfettiRef } from "@/components/ui/confetti"
+
+export function ConfettiDemo() {
+  const confettiRef = useRef<ConfettiRef>(null)
+
+  return (
+    <div>
+      <Confetti ref={confettiRef} manualstart />
+      <button onClick={() => confettiRef.current?.fire()}>
+        Trigger Confetti
+      </button>
+    </div>
+  )
+}
+```
+
+## Props
+
+### Confetti
+
+| Prop            | Type                     | Default                             | Description                                                      |
+| --------------- | ------------------------ | ----------------------------------- | ---------------------------------------------------------------- |
+| `ref`           | `React.Ref<ConfettiRef>` | `null`                              | Ref exposing imperative `fire(options?: ConfettiOptions)` method |
+| `options`       | `ConfettiOptions`        | `{}`                                | Default options for automatic or imperative confetti triggers    |
+| `globalOptions` | `ConfettiGlobalOptions`  | `{ resize: true, useWorker: true }` | Global options passed to `canvas-confetti.create()`              |
+| `manualstart`   | `Boolean`                | `false`                             | Prevents automatic confetti firing on component mount            |
+| `className`     | `String`                 | `undefined`                         | Custom CSS classes applied to the canvas element                 |
+
+### ConfettiRef
+
+| Method | Parameters                  | Return Type             | Description                                                   |
+| ------ | --------------------------- | ----------------------- | ------------------------------------------------------------- |
+| `fire` | `options?: ConfettiOptions` | `Promise<void> \| void` | Imperatively triggers a confetti burst on the canvas instance |
+
+### ConfettiOptions
+
+| Field           | Type                       | Default                        | Description                                             |
+| --------------- | -------------------------- | ------------------------------ | ------------------------------------------------------- |
+| `particleCount` | `Integer`                  | `50`                           | Number of confetti particles to launch                  |
+| `angle`         | `Number`                   | `90`                           | Launch angle in degrees                                 |
+| `spread`        | `Number`                   | `45`                           | Spread angle in degrees                                 |
+| `startVelocity` | `Number`                   | `45`                           | Initial particle velocity                               |
+| `decay`         | `Number`                   | `0.9`                          | Velocity decay rate                                     |
+| `gravity`       | `Number`                   | `1`                            | Gravity applied to particles                            |
+| `drift`         | `Number`                   | `0`                            | Horizontal drift factor                                 |
+| `flat`          | `Boolean`                  | `false`                        | Renders flat 2D shapes                                  |
+| `ticks`         | `Number`                   | `200`                          | Number of animation frames confetti lasts               |
+| `origin`        | `{ x: number, y: number }` | `{ x: 0.5, y: 0.5 }`           | Normalized viewport origin coordinates (`0.0` to `1.0`) |
+| `colors`        | `Array of Strings`         | `HEX array`                    | Custom HEX color palette                                |
+| `shapes`        | `Array of Strings`         | `['square', 'circle', 'star']` | Particle shapes or custom text shapes                   |
+| `zIndex`        | `Integer`                  | `9999`                         | Z-index of the confetti burst                           |
+| `scalar`        | `Number`                   | `1`                            | Scaling factor for particle dimensions                  |
+
+### ConfettiButton
+
+| Prop       | Type                                      | Default | Description                                       |
+| ---------- | ----------------------------------------- | ------- | ------------------------------------------------- |
+| `options`  | `ConfettiOptions & ConfettiGlobalOptions` | `{}`    | Options for the confetti launched on button click |
+| `children` | `React.ReactNode`                         | `null`  | Button label and child elements                   |
+| `ref`      | `React.Ref<HTMLButtonElement>`            | `null`  | Forwarded DOM reference to the underlying button  |
+
+## Credits
+
+- Credit to [Bankk](https://www.x.com/bankkroll_eth)
+- Inspired by [canvas-confetti](https://www.npmjs.com/package/canvas-confetti)

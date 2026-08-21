@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Trench Slab
+* Designed by: Shiva Nallaperumal
+* URL: https://www.fontshare.com/fonts/trench-slab
+* © 2026 Indian Type Foundry
+*
+* Trench Slab Medium 
+
+*
+*/
+@font-face {
+  font-family: 'TrenchSlab-Medium';
+  src: url('../fonts/TrenchSlab-Medium.woff2') format('woff2'),
+       url('../fonts/TrenchSlab-Medium.woff') format('woff'),
+       url('../fonts/TrenchSlab-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+

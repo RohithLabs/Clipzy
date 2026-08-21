@@ -1,0 +1,802 @@
+import packageData from '../../package.json'
+import * as THREE from 'three'
+import * as React from 'react'
+import Reconciler from '../../react-reconciler/index.js'
+import {
+  ContinuousEventPriority,
+  DiscreteEventPriority,
+  DefaultEventPriority,
+  IdleEventPriority,
+} from '../../react-reconciler/constants.js'
+import {
+  unstable_IdlePriority as idlePriority,
+  unstable_ImmediatePriority as immediatePriority,
+  unstable_UserBlockingPriority as userBlockingPriority,
+  unstable_NormalPriority as normalPriority,
+  unstable_LowPriority as lowPriority,
+  unstable_getCurrentPriorityLevel as getCurrentPriorityLevel,
+  unstable_scheduleCallback as scheduleCallback,
+} from 'scheduler'
+import {
+  diffProps,
+  applyProps,
+  invalidateInstance,
+  attach,
+  detach,
+  prepare,
+  isObject3D,
+  findInitialRoot,
+  getInstanceProps,
+  IsAllOptional,
+} from './utils'
+import type { RootStore } from './store'
+import { swapInteractivity, removeInteractivity, type EventHandlers } from './events'
+import type { ThreeElement } from '../three-types'
+
+type Fiber = Omit<Reconciler.Fiber, 'alternate'> & { refCleanup: null | (() => void); alternate: Fiber | null }
+
+function createReconciler<
+  Type,
+  Props,
+  Container,
+  Instance,
+  TextInstance,
+  SuspenseInstance,
+  HydratableInstance,
+  FormInstance,
+  PublicInstance,
+  HostContext,
+  ChildSet,
+  TimeoutHandle,
+  NoTimeout,
+  TransitionStatus,
+>(
+  config: Reconciler.HostConfig<
+    Type,
+    Props,
+    Container,
+    Instance,
+    TextInstance,
+    SuspenseInstance,
+    HydratableInstance,
+    FormInstance,
+    PublicInstance,
+    HostContext,
+    ChildSet,
+    TimeoutHandle,
+    NoTimeout,
+    TransitionStatus
+  >,
+): Reconciler.Reconciler<Container, Instance, TextInstance, SuspenseInstance, FormInstance, PublicInstance> {
+  const reconciler = Reconciler(config as any)
+
+  // @ts-ignore DefinitelyTyped is not up to date
+  reconciler.injectIntoDevTools()
+
+  return reconciler as any
+}
+
+const NoEventPriority = 0
+
+export interface Root {
+  fiber: Reconciler.FiberRoot
+  store: RootStore
+}
+
+export type AttachFnType<O = any> = (parent: any, self: O) => () => void
+export type AttachType<O = any> = string | AttachFnType<O>
+
+export type ConstructorRepresentation<T = any> = new (...args: any[]) => T
+
+export interface Catalogue {
+  [name: string]: ConstructorRepresentation
+}
+
+// TODO: handle constructor overloads
+// https://github.com/pmndrs/react-three-fiber/pull/2931
+// https://github.com/microsoft/TypeScript/issues/37079
+export type Args<T> = T extends ConstructorRepresentation
+  ? T extends typeof THREE.Color
+    ? [r: number, g: number, b: number] | [color: THREE.ColorRepresentation]
+    : ConstructorParameters<T>
+  : any[]
+
+type ArgsProp<P> = P extends ConstructorRepresentation
+  ? IsAllOptional<ConstructorParameters<P>> extends true
+    ? { args?: Args<P> }
+    : { args: Args<P> }
+  : { args: unknown[] }
+
+export type InstanceProps<T = any, P = any> = ArgsProp<P> & {
+  object?: T
+  dispose?: null
+  attach?: AttachType<T>
+  onUpdate?: (self: T) => void
+}
+
+export interface Instance<O = any> {
+  root: RootStore
+  type: string
+  parent: Instance | null
+  children: Instance[]
+  props: InstanceProps<O> & Record<string, unknown>
+  object: O & { __r3f?: Instance<O> }
+  eventCount: number
+  handlers: Partial<EventHandlers>
+  attach?: AttachType<O>
+  previousAttach?: any
+  isHidden: boolean
+}
+
+interface HostConfig {
+  type: string
+  props: Instance['props']
+  container: RootStore
+  instance: Instance
+  textInstance: void
+  suspenseInstance: Instance
+  hydratableInstance: never
+  formInstance: never
+  publicInstance: Instance['object']
+  hostContext: {}
+  childSet: never
+  timeoutHandle: number | undefined
+  noTimeout: -1
+  TransitionStatus: null
+}
+
+const catalogue: Catalogue = {}
+
+const PREFIX_REGEX = /^three(?=[A-Z])/
+
+const toPascalCase = (type: string): string => `${type[0].toUpperCase()}${type.slice(1)}`
+
+let i = 0
+
+const isConstructor = (object: unknown): object is ConstructorRepresentation => typeof object === 'function'
+
+export function extend<T extends ConstructorRepresentation>(objects: T): React.ExoticComponent<ThreeElement<T>>
+export function extend<T extends Catalogue>(objects: T): void
+export function extend<T extends Catalogue | ConstructorRepresentation>(
+  objects: T,
+): React.ExoticComponent<ThreeElement<any>> | void {
+  if (isConstructor(objects)) {
+    const Component = `${i++}`
+    catalogue[Component] = objects
+    return Component as any
+  } else {
+    Object.assign(catalogue, objects)
+  }
+}
+
+function validateInstance(type: string, props: HostConfig['props']): void {
+  // Get target from catalogue
+  const name = toPascalCase(type)
+  const target = catalogue[name]
+
+  // Validate element target
+  if (type !== 'primitive' && !target)
+    throw new Error(
+      `R3F: ${name} is not part of the THREE namespace! Did you forget to extend? See: https://docs.pmnd.rs/react-three-fiber/api/objects#using-3rd-party-objects-declaratively`,
+    )
+
+  // Validate primitives
+  if (type === 'primitive' && !props.object) throw new Error(`R3F: Primitives without 'object' are invalid!`)
+
+  // Throw if an object or literal was passed for args
+  if (props.args !== undefined && !Array.isArray(props.args)) throw new Error('R3F: The args prop must be an array!')
+}
+
+function createInstance(type: string, props: HostConfig['props'], root: RootStore): HostConfig['instance'] {
+  // Remove three* prefix from elements if native element not present
+  type = toPascalCase(type) in catalogue ? type : type.replace(PREFIX_REGEX, '')
+
+  validateInstance(type, props)
+
+  // Regenerate the R3F instance for primitives to simulate a new object
+  if (type === 'primitive' && props.object?.__r3f) delete props.object.__r3f
+
+  return prepare(props.object, root, type, props)
+}
+
+function hideInstance(instance: HostConfig['instance']): void {
+  if (!instance.isHidden) {
+    if (instance.props.attach && instance.parent?.object) {
+      detach(instance.parent, instance)
+    } else if (isObject3D(instance.object)) {
+      instance.object.visible = false
+    }
+
+    instance.isHidden = true
+    invalidateInstance(instance)
+  }
+}
+
+function unhideInstance(instance: HostConfig['instance']): void {
+  if (instance.isHidden) {
+    if (instance.props.attach && instance.parent?.object) {
+      attach(instance.parent, instance)
+    } else if (isObject3D(instance.object) && instance.props.visible !== false) {
+      instance.object.visible = true
+    }
+
+    instance.isHidden = false
+    invalidateInstance(instance)
+  }
+}
+
+// https://github.com/facebook/react/issues/20271
+// This will make sure events and attach are only handled once when trees are complete
+function handleContainerEffects(parent: Instance, child: Instance, beforeChild?: Instance) {
+  // Bail if tree isn't mounted or parent is not a container.
+  // This ensures that the tree is finalized and React won't discard results to Suspense
+  const state = child.root.getState()
+  if (!parent.parent && parent.object !== state.scene) return
+
+  // Create & link object on first run
+  if (!child.object) {
+    // Get target from catalogue
+    const target = catalogue[toPascalCase(child.type)]
+
+    // Create object
+    child.object = child.props.object ?? new target(...(child.props.args ?? []))
+    child.object.__r3f = child
+  }
+
+  // Set initial props
+  applyProps(child.object, child.props)
+
+  // Append instance
+  if (child.props.attach) {
+    attach(parent, child)
+  } else if (isObject3D(child.object) && isObject3D(parent.object)) {
+    const childIndex = parent.object.children.indexOf(beforeChild?.object)
+    if (beforeChild && childIndex !== -1) {
+      // If the child is already in the parent's children array, move it to the new position
+      // Otherwise, just insert it at the target position
+      const existingIndex = parent.object.children.indexOf(child.object)
+      if (existingIndex !== -1) {
+        parent.object.children.splice(existingIndex, 1)
+        const adjustedIndex = existingIndex < childIndex ? childIndex - 1 : childIndex
+        parent.object.children.splice(adjustedIndex, 0, child.object)
+      } else {
+        child.object.parent = parent.object
+        parent.object.children.splice(childIndex, 0, child.object)
+        child.object.dispatchEvent({ type: 'added' })
+        parent.object.dispatchEvent({ type: 'childadded', child: child.object })
+      }
+    } else {
+      parent.object.add(child.object)
+    }
+  }
+
+  // Link subtree
+  for (const childInstance of child.children) handleContainerEffects(child, childInstance)
+
+  // Tree was updated, request a frame
+  invalidateInstance(child)
+}
+
+function appendChild(parent: HostConfig['instance'], child: HostConfig['instance'] | HostConfig['textInstance']) {
+  if (!child) return
+
+  // Move an existing child instead of duplicating it
+  if (child.parent === parent) {
+    const childIndex = parent.children.indexOf(child)
+    if (childIndex !== -1) parent.children.splice(childIndex, 1)
+  }
+
+  // Link instances
+  child.parent = parent
+  parent.children.push(child)
+
+  // Attach tree once complete
+  handleContainerEffects(parent, child)
+}
+
+function insertBefore(
+  parent: HostConfig['instance'],
+  child: HostConfig['instance'] | HostConfig['textInstance'],
+  beforeChild: HostConfig['instance'] | HostConfig['textInstance'],
+) {
+  if (!child || !beforeChild) return
+
+  // Move an existing child instead of duplicating it.
+  if (child.parent === parent) {
+    const childIndex = parent.children.indexOf(child)
+    if (childIndex !== -1) parent.children.splice(childIndex, 1)
+  }
+
+  // Link instances
+  child.parent = parent
+  const childIndex = parent.children.indexOf(beforeChild)
+  if (childIndex !== -1) parent.children.splice(childIndex, 0, child)
+  else parent.children.push(child)
+
+  // Attach tree once complete
+  handleContainerEffects(parent, child, beforeChild)
+}
+
+function disposeOnIdle(object: any) {
+  if (typeof object.dispose === 'function') {
+    const handleDispose = () => {
+      try {
+        object.dispose()
+      } catch {
+        // no-op
+      }
+    }
+
+    // In a testing environment, cleanup immediately
+    if (typeof IS_REACT_ACT_ENVIRONMENT !== 'undefined') handleDispose()
+    // Otherwise, using a real GPU so schedule cleanup to prevent stalls
+    else scheduleCallback(idlePriority, handleDispose)
+  }
+}
+
+function removeChild(
+  parent: HostConfig['instance'],
+  child: HostConfig['instance'] | HostConfig['textInstance'],
+  dispose?: boolean,
+) {
+  if (!child) return
+
+  // Unlink instances
+  child.parent = null
+  const childIndex = parent.children.indexOf(child)
+  if (childIndex !== -1) parent.children.splice(childIndex, 1)
+
+  // Eagerly tear down tree
+  if (child.props.attach) {
+    detach(parent, child)
+  } else if (isObject3D(child.object) && isObject3D(parent.object)) {
+    parent.object.remove(child.object)
+    removeInteractivity(findInitialRoot(child), child.object)
+  }
+
+  // Allow objects to bail out of unmount disposal with dispose={null}
+  const shouldDispose = child.props.dispose !== null && dispose !== false
+
+  // Recursively remove instance children
+  for (let i = child.children.length - 1; i >= 0; i--) {
+    const node = child.children[i]
+    removeChild(child, node, shouldDispose)
+  }
+  child.children.length = 0
+
+  // Unlink instance object
+  delete child.object.__r3f
+
+  // Dispose object whenever the reconciler feels like it.
+  // Never dispose of primitives because their state may be kept outside of React!
+  // In order for an object to be able to dispose it
+  //   - has a dispose method
+  //   - cannot be a <primitive object={...} />
+  //   - cannot be a THREE.Scene, because three has broken its own API
+  if (shouldDispose && child.type !== 'primitive' && child.object.type !== 'Scene') {
+    disposeOnIdle(child.object)
+  }
+
+  // Tree was updated, request a frame for top-level instance
+  if (dispose === undefined) invalidateInstance(child)
+}
+
+function setFiberRef(fiber: Fiber, publicInstance: HostConfig['publicInstance']): void {
+  for (const _fiber of [fiber, fiber.alternate]) {
+    if (_fiber !== null) {
+      if (typeof _fiber.ref === 'function') {
+        _fiber.refCleanup?.()
+        const cleanup = _fiber.ref(publicInstance)
+        if (typeof cleanup === 'function') _fiber.refCleanup = cleanup
+      } else if (_fiber.ref) {
+        _fiber.ref.current = publicInstance
+      }
+    }
+  }
+}
+
+const reconstructed: [oldInstance: HostConfig['instance'], props: HostConfig['props'], fiber: Fiber][] = []
+
+function flushReconstructedInstances(): void {
+  if (reconstructed.length === 0) return
+
+  try {
+    swapReconstructedInstances()
+  } finally {
+    reconstructed.length = 0
+  }
+}
+
+function swapReconstructedInstances(): void {
+  // Detach instance
+  for (const [instance] of reconstructed) {
+    const parent = instance.parent
+    if (parent) {
+      if (instance.props.attach) {
+        detach(parent, instance)
+      } else if (isObject3D(instance.object) && isObject3D(parent.object)) {
+        parent.object.remove(instance.object)
+      }
+
+      for (const child of instance.children) {
+        if (child.props.attach) {
+          detach(instance, child)
+        } else if (isObject3D(child.object) && isObject3D(instance.object)) {
+          instance.object.remove(child.object)
+        }
+      }
+    }
+
+    // If the old instance is hidden, we need to unhide it.
+    // React assumes it can discard instances since they're pure for DOM.
+    // This isn't true for us since our lifetimes are impure and longliving.
+    // So, we manually check if an instance was hidden and unhide it.
+    if (instance.isHidden) unhideInstance(instance)
+
+    // Dispose of old object if able
+    if (instance.object.__r3f) delete instance.object.__r3f
+    if (instance.type !== 'primitive') disposeOnIdle(instance.object)
+  }
+
+  // Update instance
+  for (const [instance, props, fiber] of reconstructed) {
+    instance.props = props
+
+    const parent = instance.parent
+    if (parent) {
+      // Get target from catalogue
+      const target = catalogue[toPascalCase(instance.type)]
+
+      // Create object
+      const prevObject = instance.object
+      instance.object = instance.props.object ?? new target(...(instance.props.args ?? []))
+      instance.object.__r3f = instance
+      setFiberRef(fiber, instance.object)
+
+      swapInteractivity(findInitialRoot(instance), prevObject, instance.object)
+
+      applyProps(instance.object, instance.props)
+
+      if (instance.props.attach) {
+        attach(parent, instance)
+      } else if (isObject3D(instance.object) && isObject3D(parent.object)) {
+        parent.object.add(instance.object)
+      }
+
+      for (const child of instance.children) {
+        if (child.props.attach) {
+          attach(instance, child)
+        } else if (isObject3D(child.object) && isObject3D(instance.object)) {
+          instance.object.add(child.object)
+        }
+      }
+
+      // Tree was updated, request a frame
+      invalidateInstance(instance)
+    }
+  }
+}
+
+// Don't handle text instances, make it no-op
+const handleTextInstance = () => {}
+
+const NO_CONTEXT: HostConfig['hostContext'] = {}
+
+let currentUpdatePriority: number = NoEventPriority
+
+// Mirrors react-dom's getEventPriority for parity with events outside of React
+// https://github.com/facebook/react/blob/main/packages/react-dom-bindings/src/events/ReactDOMEventListener.js
+function getEventPriority(type: string): number {
+  switch (type) {
+    case 'beforetoggle':
+    case 'cancel':
+    case 'click':
+    case 'close':
+    case 'contextmenu':
+    case 'copy':
+    case 'cut':
+    case 'auxclick':
+    case 'dblclick':
+    case 'dragend':
+    case 'dragstart':
+    case 'drop':
+    case 'focusin':
+    case 'focusout':
+    case 'input':
+    case 'invalid':
+    case 'keydown':
+    case 'keypress':
+    case 'keyup':
+    case 'mousedown':
+    case 'mouseup':
+    case 'paste':
+    case 'pause':
+    case 'play':
+    case 'pointercancel':
+    case 'pointerdown':
+    case 'pointerup':
+    case 'ratechange':
+    case 'reset':
+    case 'resize':
+    case 'seeked':
+    case 'submit':
+    case 'touchcancel':
+    case 'touchend':
+    case 'touchstart':
+    case 'volumechange':
+    case 'change':
+    case 'selectionchange':
+    case 'compositionstart':
+    case 'compositionend':
+    case 'compositionupdate':
+    case 'beforeinput':
+    case 'blur':
+    case 'fullscreenchange':
+    case 'focus':
+    case 'hashchange':
+    case 'popstate':
+    case 'select':
+    case 'selectstart':
+      return DiscreteEventPriority
+    case 'drag':
+    case 'dragenter':
+    case 'dragexit':
+    case 'dragleave':
+    case 'dragover':
+    case 'mousemove':
+    case 'mouseout':
+    case 'mouseover':
+    case 'pointermove':
+    case 'pointerout':
+    case 'pointerover':
+    case 'scroll':
+    case 'touchmove':
+    case 'wheel':
+    case 'mouseenter':
+    case 'mouseleave':
+    case 'pointerenter':
+    case 'pointerleave':
+      return ContinuousEventPriority
+    case 'message': {
+      switch (getCurrentPriorityLevel()) {
+        case immediatePriority:
+          return DiscreteEventPriority
+        case userBlockingPriority:
+          return ContinuousEventPriority
+        case normalPriority:
+        case lowPriority:
+          return DefaultEventPriority
+        case idlePriority:
+          return IdleEventPriority
+        default:
+          return DefaultEventPriority
+      }
+    }
+    default:
+      return DefaultEventPriority
+  }
+}
+
+function scheduleMicrotask(callback: () => void): void {
+  if (typeof queueMicrotask === 'function') {
+    queueMicrotask(callback)
+  } else if (typeof Promise !== 'undefined') {
+    Promise.resolve()
+      .then(callback)
+      .catch((error: unknown) => {
+        setTimeout(() => {
+          throw error
+        })
+      })
+  } else {
+    setTimeout(callback)
+  }
+}
+
+export const reconciler = /* @__PURE__ */ createReconciler<
+  HostConfig['type'],
+  HostConfig['props'],
+  HostConfig['container'],
+  HostConfig['instance'],
+  HostConfig['textInstance'],
+  HostConfig['suspenseInstance'],
+  HostConfig['hydratableInstance'],
+  HostConfig['formInstance'],
+  HostConfig['publicInstance'],
+  HostConfig['hostContext'],
+  HostConfig['childSet'],
+  HostConfig['timeoutHandle'],
+  HostConfig['noTimeout'],
+  HostConfig['TransitionStatus']
+>({
+  isPrimaryRenderer: false,
+  warnsIfNotActing: false,
+  supportsMutation: true,
+  supportsPersistence: false,
+  supportsHydration: false,
+  createInstance,
+  removeChild,
+  appendChild,
+  appendInitialChild: appendChild,
+  insertBefore,
+  appendChildToContainer(container, child) {
+    const scene = (container.getState().scene as unknown as Instance<THREE.Scene>['object']).__r3f
+    if (!child || !scene) return
+
+    appendChild(scene, child)
+  },
+  removeChildFromContainer(container, child) {
+    const scene = (container.getState().scene as unknown as Instance<THREE.Scene>['object']).__r3f
+    if (!child || !scene) return
+
+    removeChild(scene, child)
+  },
+  insertInContainerBefore(container, child, beforeChild) {
+    const scene = (container.getState().scene as unknown as Instance<THREE.Scene>['object']).__r3f
+    if (!child || !beforeChild || !scene) return
+
+    insertBefore(scene, child, beforeChild)
+  },
+  getRootHostContext: () => NO_CONTEXT,
+  getChildHostContext: () => NO_CONTEXT,
+  commitUpdate(
+    instance: HostConfig['instance'],
+    type: HostConfig['type'],
+    oldProps: HostConfig['props'],
+    newProps: HostConfig['props'],
+    fiber: Fiber,
+  ) {
+    validateInstance(type, newProps)
+
+    let reconstruct = false
+
+    // Reconstruct primitives if object prop changes
+    if (instance.type === 'primitive' && oldProps.object !== newProps.object) reconstruct = true
+    // Reconstruct instance if args were added or removed
+    else if (newProps.args?.length !== oldProps.args?.length) reconstruct = true
+    // Reconstruct instance if args were changed
+    else if (newProps.args?.some((value, index) => value !== oldProps.args?.[index])) reconstruct = true
+
+    // Reconstruct when args or <primitive object={...} have changes.
+    // Instances are swapped at the end of the mutation phase (resetAfterCommit)
+    if (reconstruct) {
+      reconstructed.push([instance, getInstanceProps(newProps), fiber])
+    } else {
+      // Create a diff-set, flag if there are any changes
+      const changedProps = diffProps(instance, newProps)
+
+      // Replace the old prop snapshot after computing the diff
+      //`attach` is preserved since it cannot be updated dynamically
+      const attach = instance.props.attach
+      instance.props = getInstanceProps(newProps)
+      if (attach !== undefined) instance.props.attach = attach
+      else delete instance.props.attach
+
+      if (Object.keys(changedProps).length) applyProps(instance.object, changedProps)
+    }
+  },
+  finalizeInitialChildren: () => false,
+  commitMount() {},
+  getPublicInstance: (instance) => instance?.object!,
+  prepareForCommit: () => null,
+  preparePortalMount: (container) => prepare(container.getState().scene, container, '', {}),
+  // Reconstructed instances are swapped once all mutations are committed,
+  // before layout effects run so refs point to the new objects
+  resetAfterCommit: flushReconstructedInstances,
+  shouldSetTextContent: () => false,
+  clearContainer: () => false,
+  hideInstance,
+  unhideInstance,
+  createTextInstance: handleTextInstance,
+  hideTextInstance: handleTextInstance,
+  unhideTextInstance: handleTextInstance,
+  // Mirrors react-dom, which flushes discrete work in microtasks
+  supportsMicrotasks: true,
+  scheduleMicrotask,
+  scheduleTimeout: (typeof setTimeout === 'function' ? setTimeout : undefined) as any,
+  cancelTimeout: (typeof clearTimeout === 'function' ? clearTimeout : undefined) as any,
+  noTimeout: -1,
+  getInstanceFromNode: () => null,
+  beforeActiveInstanceBlur() {},
+  afterActiveInstanceBlur() {},
+  detachDeletedInstance() {},
+  prepareScopeUpdate() {},
+  getInstanceFromScope: () => null,
+  shouldAttemptEagerTransition: () => false,
+  trackSchedulerEvent: () => {},
+  resolveEventType: () => null,
+  resolveEventTimeStamp: () => -1.1,
+  requestPostPaintCallback() {},
+  maySuspendCommit: () => false,
+  preloadInstance: () => true, // true indicates already loaded
+  suspendInstance() {},
+  waitForCommitToBeReady: () => null,
+  NotPendingTransition: null,
+  // The reconciler types use the internal ReactContext with all the hidden properties
+  // so we have to cast from the public React.Context type
+  HostTransitionContext: /* @__PURE__ */ React.createContext<HostConfig['TransitionStatus']>(
+    null,
+  ) as unknown as Reconciler.ReactContext<HostConfig['TransitionStatus']>,
+  setCurrentUpdatePriority(newPriority: number) {
+    currentUpdatePriority = newPriority
+  },
+  getCurrentUpdatePriority() {
+    return currentUpdatePriority
+  },
+  resolveUpdatePriority() {
+    if (currentUpdatePriority !== NoEventPriority) return currentUpdatePriority
+
+    const eventType = typeof window !== 'undefined' ? window.event?.type : undefined
+    if (eventType === undefined) return DefaultEventPriority
+    return getEventPriority(eventType)
+  },
+  resetFormInstance() {},
+  // @ts-ignore DefinitelyTyped is not up to date
+  rendererPackageName: '@react-three/fiber',
+  rendererVersion: packageData.version,
+
+  // https://github.com/facebook/react/pull/31975
+  // https://github.com/facebook/react/pull/31999
+  applyViewTransitionName(_instance: any, _name: any, _className: any) {},
+  restoreViewTransitionName(_instance: any, _props: any) {},
+  cancelViewTransitionName(_instance: any, _name: any, _props: any) {},
+  cancelRootViewTransitionName(_rootContainer: any) {},
+  restoreRootViewTransitionName(_rootContainer: any) {},
+  InstanceMeasurement: null,
+  measureInstance: (_instance: any) => null,
+  wasInstanceInViewport: (_measurement: any): boolean => true,
+  hasInstanceChanged: (_oldMeasurement: any, _newMeasurement: any): boolean => false,
+  hasInstanceAffectedParent: (_oldMeasurement: any, _newMeasurement: any): boolean => false,
+
+  // https://github.com/facebook/react/pull/32002
+  // https://github.com/facebook/react/pull/34486
+  suspendOnActiveViewTransition(_state: any, _container: any) {},
+
+  // https://github.com/facebook/react/pull/32451
+  // https://github.com/facebook/react/pull/32760
+  startGestureTransition: () => null,
+  startViewTransition: () => null,
+  stopViewTransition(_transition: null) {},
+
+  // https://github.com/facebook/react/pull/32038
+  createViewTransitionInstance: (_name: string): null => null,
+
+  // https://github.com/facebook/react/pull/32379
+  // https://github.com/facebook/react/pull/32786
+  getCurrentGestureOffset(_provider: null): number {
+    throw new Error('startGestureTransition is not yet supported in react-three-fiber.')
+  },
+
+  // https://github.com/facebook/react/pull/32500
+  cloneMutableInstance(instance: any, _keepChildren: any) {
+    return instance
+  },
+  cloneMutableTextInstance(textInstance: any) {
+    return textInstance
+  },
+  cloneRootViewTransitionContainer(_rootContainer: any) {
+    throw new Error('Not implemented.')
+  },
+  removeRootViewTransitionClone(_rootContainer: any, _clone: any) {
+    throw new Error('Not implemented.')
+  },
+
+  // https://github.com/facebook/react/pull/32465
+  createFragmentInstance: (_fiber: any): null => null,
+  updateFragmentInstanceFiber(_fiber: any, _instance: any): void {},
+  commitNewChildToFragmentInstance(_child: any, _fragmentInstance: any): void {},
+  deleteChildFromFragmentInstance(_child: any, _fragmentInstance: any): void {},
+
+  // https://github.com/facebook/react/pull/32653
+  measureClonedInstance: (_instance: any) => null,
+
+  // https://github.com/facebook/react/pull/32819
+  maySuspendCommitOnUpdate: (_type: any, _oldProps: any, _newProps: any) => false,
+  maySuspendCommitInSyncRender: (_type: any, _props: any) => false,
+
+  // https://github.com/facebook/react/pull/34486
+  startSuspendingCommit: () => null,
+
+  // https://github.com/facebook/react/pull/34522
+  getSuspendedCommitReason: (_state: any, _rootContainer: any) => null,
+})

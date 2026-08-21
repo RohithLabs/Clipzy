@@ -1,0 +1,226 @@
+---
+title: Accordion 手风琴
+description: 用于在紧凑空间中组织信息的可折叠内容面板
+links:
+  rac: Disclosure
+  source: accordion/accordion.tsx
+  styles: accordion.css
+  storybook: Components/Navigation/Accordion
+  figma: true
+---
+
+## 用法
+
+```tsx
+import { Accordion } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="accordion-basic"
+  minHeight="400px"
+/>
+
+## 组件结构
+
+```tsx
+import { Accordion } from '@heroui/react';
+
+export default () => (
+  <Accordion>
+    <Accordion.Item>
+      <Accordion.Heading>
+        <Accordion.Trigger>
+          <Accordion.Indicator />
+        </Accordion.Trigger>
+      </Accordion.Heading>
+      <Accordion.Panel>
+        <Accordion.Body/>
+      </Accordion.Panel>
+    </Accordion.Item>
+  </Accordion>
+)
+```
+
+## 示例
+
+### 表面样式
+
+<ComponentPreview
+  name="accordion-surface"
+  minHeight="400px"
+/>
+
+### 无分隔线
+
+<ComponentPreview
+  name="accordion-without-separator"
+  minHeight="400px"
+/>
+
+### 多项展开
+
+<ComponentPreview
+  name="accordion-multiple"
+  minHeight="524px"
+/>
+
+### 禁用状态
+
+<ComponentPreview
+  name="accordion-disabled"
+  minHeight="524px"
+/>
+
+### 受控组件
+
+<ComponentPreview
+  name="accordion-controlled"
+  minHeight="400px"
+/>
+
+### 自定义指示器
+
+<ComponentPreview
+  name="accordion-custom-indicator"
+  minHeight="320px"
+/>
+
+### 渲染函数
+
+<ComponentPreview
+  name="accordion-render-function"
+  minHeight="400px"
+/>
+
+### 常见问题布局
+
+<ComponentPreview
+  name="accordion-faq"
+  minHeight="720px"
+/>
+
+## 自定义样式
+
+### Tailwind CSS
+
+<ComponentPreview name="accordion-custom-styles" />
+
+### 全局 CSS
+
+若要自定义 Accordion 组件类，可使用 `@layer components` 指令。
+[了解更多](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)。
+
+```css
+@layer components {
+  .accordion {
+    @apply rounded-xl bg-gray-50;
+  }
+
+  .accordion__trigger {
+    @apply font-semibold text-lg;
+  }
+
+  .accordion--outline {
+    @apply shadow-lg border-2;
+  }
+}
+```
+
+## 样式参考
+
+HeroUI 遵循 [BEM](https://getbem.com/) 方法论，确保组件变体与状态可复用且易于自定义。
+
+### CSS 类
+
+Accordion 组件使用以下 CSS 类（[查看源码样式](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/accordion.css)）：
+
+#### 基础类 [!toc]
+- `.accordion` - Accordion 根容器
+- `.accordion__body` - 正文容器
+- `.accordion__heading` - 标题包裹层
+- `.accordion__indicator` - 展开/收起指示图标
+- `.accordion__item` - 单个 Accordion 项
+- `.accordion__panel` - 可折叠面板容器
+- `.accordion__trigger` - 可点击的触发按钮
+
+#### 变体类 [!toc]
+- `.accordion--outline` - 描边变体（边框与背景）
+
+#### 状态类 [!toc]
+- `.accordion__trigger[aria-expanded="true"]` - 展开状态
+- `.accordion__panel[aria-hidden="false"]` - 面板可见状态
+
+### 交互状态
+
+该组件同时支持 CSS 伪类与 data 属性：
+
+- **悬停**：触发器上 `:hover` 或 `[data-hovered="true"]`
+- **聚焦**：触发器上 `:focus-visible` 或 `[data-focus-visible="true"]`
+- **禁用**：触发器上 `:disabled` 或 `[aria-disabled="true"]`
+- **展开**：触发器上 `[aria-expanded="true"]`
+
+## API 参考
+
+### Accordion
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `allowsMultipleExpanded` | `boolean` | `false` | 是否允许多项同时展开 |
+| `defaultExpandedKeys` | `Iterable<Key>` | - | 初始展开的 key |
+| `expandedKeys` | `Iterable<Key>` | - | 受控的展开 key |
+| `onExpandedChange` | `(keys: Set<Key>) => void` | - | 展开 key 变化时调用的事件处理函数 |
+| `isDisabled` | `boolean` | `false` | 是否禁用整个 Accordion |
+| `variant` | `"default" \| "surface"` | `"default"` | Accordion 的视觉变体 |
+| `hideSeparator` | `boolean` | `false` | 是否隐藏 Accordion 项之间的分隔线 |
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode` | - | Accordion 项 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionRenderProps>` | - | 使用自定义渲染函数覆盖默认 DOM 元素。|
+
+### Accordion.Item
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `id` | `Key` | - | 该项的唯一标识 |
+| `isDisabled` | `boolean` | `false` | 是否禁用该项 |
+| `defaultExpanded` | `boolean` | `false` | 初始是否展开 |
+| `isExpanded` | `boolean` | - | 受控展开状态 |
+| `onExpandedChange` | `(isExpanded: boolean) => void` | - | 展开状态变化时调用的事件处理函数 |
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode` | - | 项内容 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionItemRenderProps>` | - | 使用自定义渲染函数覆盖默认 DOM 元素。|
+
+### Accordion.Trigger
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode \| RenderFunction` | - | 触发器内容或渲染函数 |
+| `onPress` | `() => void` | - | 额外的按下事件处理函数 |
+| `isDisabled` | `boolean` | - | 是否禁用触发器 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, TriggerRenderProps>` | - | 使用自定义渲染函数覆盖默认 DOM 元素。|
+
+### Accordion.Panel
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode` | - | 面板内容 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionPanelRenderProps>` | - | 使用自定义渲染函数覆盖默认 DOM 元素。|
+
+### Accordion.Indicator
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode` | - | 自定义指示图标 |
+
+### Accordion.Body
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `className` | `string` | - | 额外的 CSS 类 |
+| `children` | `ReactNode` | - | 正文内容 |
+
+## 相关组件
+
+<RelatedComponents component="accordion" />

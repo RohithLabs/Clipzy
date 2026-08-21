@@ -1,0 +1,33 @@
+pre-commit:
+  parallel: true
+  commands:
+    build:registry:
+      glob: "**/registry/**/*.{ts,tsx}"
+      # Same regeneration-only command as the root build:registry script and
+      # CI's registry-drift job. Stage generated artifacts by explicit path —
+      # never `git add --all`. CI's registry-drift job checks these same paths.
+      run: >
+        pnpm --filter=www build:registry &&
+        git add apps/www/registry.json apps/www/registry/__index__.tsx
+        apps/www/public/registry.json apps/www/public/r
+        apps/www/public/llms.txt apps/www/public/llms-full.txt
+    lint:fix:
+      root: "apps/www/"
+      glob: "*.{js,ts,cjs,mjs,jsx,tsx}"
+      run: pnpm exec eslint --fix --no-warn-ignored {staged_files}
+      stage_fixed: true
+    format:fix:
+      root: "apps/www/"
+      glob: "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc,mdx}"
+      run: pnpm exec prettier --log-level silent --write --cache {staged_files}
+      stage_fixed: true
+
+pre-push:
+  commands:
+    typecheck:
+      run: pnpm typecheck
+
+commit-msg:
+  commands:
+    "lint commit message":
+      run: npx --no -- commitlint --edit "$1"

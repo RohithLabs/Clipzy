@@ -20,6 +20,7 @@ import {
   type MouthStyle
 } from '@/bot/face'
 import { SHAPES } from '@/bot/skins'
+import { HATS, GLASSES, PROPS, AURAS, type HatId, type GlassesId, type PropId, type AuraId } from '@/bot/accessories'
 import { t } from '@/i18n'
 
 const shape = defineModel<string>('shape', { required: true })
@@ -30,6 +31,10 @@ const eyebrows = defineModel<EyebrowsStyle>('eyebrows', { default: DEFAULT_EYEBR
 const nose = defineModel<NoseStyle>('nose', { default: DEFAULT_NOSE })
 const cheeks = defineModel<CheeksStyle>('cheeks', { default: DEFAULT_CHEEKS })
 const mouth = defineModel<MouthStyle>('mouth', { default: DEFAULT_MOUTH })
+const hat = defineModel<HatId>('hat', { default: 'none' })
+const glasses = defineModel<GlassesId>('glasses', { default: 'none' })
+const prop = defineModel<PropId>('prop', { default: 'none' })
+const aura = defineModel<AuraId>('aura', { default: 'none' })
 
 /**
  * Les vignettes sont figees a la meme date que la pose de repos : elles montrent
@@ -306,6 +311,94 @@ const EYE_PREVIEW = {
         :frozen-at="PREVIEW_AT"
         @click="expression = e.id"
       />
+    </div>
+
+    <!-- Chapeaux (Hats) -->
+    <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
+      <span>👑</span> {{ t('panel.hats') || 'Hats & Headwear' }}
+    </h2>
+    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+      <button
+        v-for="h in HATS"
+        :key="h.id"
+        type="button"
+        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        :class="
+          hat === h.id
+            ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
+            : 'border-[var(--line)] text-[var(--muted)] hover:border-[var(--muted)] hover:text-[var(--ink)]'
+        "
+        @click="hat = h.id"
+      >
+        <span class="text-base">{{ h.icon }}</span>
+        <span class="truncate text-[11px]">{{ h.label }}</span>
+      </button>
+    </div>
+
+    <!-- Lunettes (Glasses) -->
+    <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
+      <span>🕶️</span> {{ t('panel.glasses') || 'Glasses & Shades' }}
+    </h2>
+    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+      <button
+        v-for="g in GLASSES"
+        :key="g.id"
+        type="button"
+        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        :class="
+          glasses === g.id
+            ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
+            : 'border-[var(--line)] text-[var(--muted)] hover:border-[var(--muted)] hover:text-[var(--ink)]'
+        "
+        @click="glasses = g.id"
+      >
+        <span class="text-base">{{ g.icon }}</span>
+        <span class="truncate text-[11px]">{{ g.label }}</span>
+      </button>
+    </div>
+
+    <!-- Accessoires / Props -->
+    <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
+      <span>🎮</span> {{ t('panel.props') || 'Props & Items' }}
+    </h2>
+    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+      <button
+        v-for="p in PROPS"
+        :key="p.id"
+        type="button"
+        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        :class="
+          prop === p.id
+            ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
+            : 'border-[var(--line)] text-[var(--muted)] hover:border-[var(--muted)] hover:text-[var(--ink)]'
+        "
+        @click="prop = p.id"
+      >
+        <span class="text-base">{{ p.icon }}</span>
+        <span class="truncate text-[11px]">{{ p.label }}</span>
+      </button>
+    </div>
+
+    <!-- Aura FX -->
+    <h2 class="mt-5 text-sm font-semibold flex items-center gap-1.5">
+      <span>✨</span> {{ t('panel.auras') || 'Aura & Energy FX' }}
+    </h2>
+    <div class="mt-2 grid grid-cols-3 gap-1.5" role="radiogroup">
+      <button
+        v-for="a in AURAS"
+        :key="a.id"
+        type="button"
+        class="flex cursor-pointer items-center gap-2 rounded-xl border p-2 text-xs transition"
+        :class="
+          aura === a.id
+            ? 'border-[var(--ink)] bg-white font-semibold text-[var(--ink)] shadow-2xs dark:bg-zinc-800'
+            : 'border-[var(--line)] text-[var(--muted)] hover:border-[var(--muted)] hover:text-[var(--ink)]'
+        "
+        @click="aura = a.id"
+      >
+        <span class="text-base">{{ a.icon }}</span>
+        <span class="truncate text-[11px]">{{ a.label }}</span>
+      </button>
     </div>
 
     <!-- Couleur -->

@@ -1,0 +1,130 @@
+---
+title: Alert
+description: Display important messages and notifications to users with status indicators
+links:
+  source: alert/alert.tsx
+  styles: alert.css
+  storybook: Components/Feedback/Alert
+  figma: true
+---
+
+## Usage
+
+```tsx
+import { Alert } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="alert-basic"
+/>
+
+## Anatomy
+
+```tsx
+import { Alert } from '@heroui/react';
+
+export default () => (
+  <Alert>
+    <Alert.Indicator />
+    <Alert.Content>
+      <Alert.Title />
+      <Alert.Description />
+    </Alert.Content>
+  </Alert>
+)
+```
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="alert-custom-styles" />
+
+### Global CSS
+
+To customize the Alert component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .alert {
+    @apply rounded-2xl shadow-lg;
+  }
+
+  .alert__title {
+    @apply font-bold text-lg;
+  }
+
+  .alert--danger {
+    @apply border-l-4 border-red-600;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Alert component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/alert.css)):
+
+#### Base Classes [!toc]
+- `.alert` - Base alert container
+- `.alert__indicator` - Icon/indicator container
+- `.alert__content` - Content wrapper for title and description
+- `.alert__title` - Alert title text
+- `.alert__description` - Alert description text
+
+#### Status Variant Classes [!toc]
+- `.alert--default` - Default gray status
+- `.alert--accent` - Accent blue status
+- `.alert--success` - Success green status
+- `.alert--warning` - Warning yellow/orange status
+- `.alert--danger` - Danger red status
+
+### Interactive States
+
+The Alert component is primarily informational and doesn't have interactive states on the base component. However, it can contain interactive elements like buttons or close buttons.
+
+## API Reference
+
+### Alert
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `status` | `"default" \| "accent" \| "success" \| "warning" \| "danger"` | `"default"` | The visual status of the alert |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The alert content |
+
+### Alert.Indicator
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Custom indicator icon (defaults to status icon) |
+
+### Alert.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Content (typically Title and Description) |
+
+### Alert.Title
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The alert title text |
+
+### Alert.Description
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The alert description text |
+
+## Related Components
+
+<RelatedComponents component="alert" />

@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Quicksand
+* Designed by: Andrew Paglinawan
+* URL: https://www.fontshare.com/fonts/quicksand
+* © 2026 Indian Type Foundry
+*
+* Quicksand Medium 
+
+*
+*/
+@font-face {
+  font-family: 'Quicksand-Medium';
+  src: url('../fonts/Quicksand-Medium.woff2') format('woff2'),
+       url('../fonts/Quicksand-Medium.woff') format('woff'),
+       url('../fonts/Quicksand-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+

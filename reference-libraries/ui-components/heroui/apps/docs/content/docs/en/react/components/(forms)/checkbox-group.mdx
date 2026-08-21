@@ -1,0 +1,161 @@
+---
+title: CheckboxGroup
+description: A checkbox group component for managing multiple checkbox selections
+icon: updated
+links:
+  rac: CheckboxGroup
+  source: checkbox-group/checkbox-group.tsx
+  styles: checkbox-group.css
+  storybook: Components/Forms/CheckboxGroup
+---
+
+## Usage
+
+```tsx
+import { CheckboxGroup, Checkbox, Label, Description } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="checkbox-group-basic"
+/>
+
+## Anatomy
+
+```tsx
+import {CheckboxGroup, Checkbox, Label, Description, FieldError} from '@heroui/react';
+
+export default () => (
+  <CheckboxGroup name="interests">
+    <Label />
+    <Description /> {/* Optional */}
+    <Checkbox value="option1">
+      <Checkbox.Content>
+        <Checkbox.Control>
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        Label {/* plain text — the clickable label */}
+      </Checkbox.Content>
+      <Description /> {/* Optional per-checkbox help text */}
+    </Checkbox>
+    <FieldError /> {/* Optional */}
+  </CheckboxGroup>
+);
+```
+
+## Examples
+
+### In Surface
+
+When used inside a [Surface](/docs/components/surface) component, use `variant="secondary"` to apply the lower emphasis variant suitable for surface backgrounds.
+
+<ComponentPreview
+  name="checkbox-group-on-surface"
+/>
+
+### Disabled
+
+<ComponentPreview
+  name="checkbox-group-disabled"
+/>
+
+### Indeterminate
+
+<ComponentPreview
+  name="checkbox-group-indeterminate"
+/>
+
+### Controlled
+
+<ComponentPreview
+  name="checkbox-group-controlled"
+/>
+
+### Validation
+
+<ComponentPreview
+  name="checkbox-group-validation"
+/>
+
+### Features and Add-ons Example
+
+<ComponentPreview
+  name="checkbox-group-features-and-addons"
+/>
+
+### With Custom Indicator
+
+<ComponentPreview
+  name="checkbox-group-with-custom-indicator"
+/>
+
+### Render Function
+
+<ComponentPreview
+  name="checkbox-group-render-function"
+/>
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="checkbox-group-custom-styles" />
+
+### Global CSS
+
+To customize the CheckboxGroup component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .checkbox-group {
+    @apply flex flex-col gap-2;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The CheckboxGroup component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/checkbox-group.css)):
+
+#### Base Classes [!toc]
+
+- `.checkbox-group` - Base checkbox group container
+
+## API Reference
+
+### CheckboxGroup
+
+Inherits from [React Aria CheckboxGroup](https://react-spectrum.adobe.com/react-aria/CheckboxGroup.html).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string[]` | - | The current selected values (controlled) |
+| `defaultValue` | `string[]` | - | The default selected values (uncontrolled) |
+| `onChange` | `(value: string[]) => void` | - | Handler called when the selected values change |
+| `isDisabled` | `boolean` | `false` | Whether the checkbox group is disabled |
+| `isRequired` | `boolean` | `false` | Whether the checkbox group is required |
+| `isReadOnly` | `boolean` | `false` | Whether the checkbox group is read only |
+| `isInvalid` | `boolean` | `false` | Whether the checkbox group is in an invalid state |
+| `name` | `string` | - | The name of the checkbox group, used when submitting an HTML form |
+| `children` | `React.ReactNode \| (values: CheckboxGroupRenderProps) => React.ReactNode` | - | Checkbox group content or render prop |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, CheckboxGroupRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Render Props
+
+When using the render prop pattern, these values are provided:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `value` | `string[]` | The currently selected values |
+| `isDisabled` | `boolean` | Whether the checkbox group is disabled |
+| `isReadOnly` | `boolean` | Whether the checkbox group is read only |
+| `isInvalid` | `boolean` | Whether the checkbox group is in an invalid state |
+| `isRequired` | `boolean` | Whether the checkbox group is required |
+
+## Related Components
+
+<RelatedComponents component="checkboxgroup" />

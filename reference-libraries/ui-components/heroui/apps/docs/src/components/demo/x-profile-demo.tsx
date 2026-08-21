@@ -1,0 +1,54 @@
+"use client";
+
+import {Avatar, Card} from "@heroui/react";
+
+import {useDictionary} from "@/hooks/use-dictionary";
+import {VerifiedBadgeIcon} from "@/icons/verified-badge";
+
+export function XProfileDemo() {
+  const {demos} = useDictionary();
+  const t = demos.xProfile;
+
+  return (
+    <Card className="w-full items-start justify-center xl:w-[400px]">
+      <Card.Header className="items-top w-full flex-row justify-between">
+        <div className="flex items-center gap-3">
+          <Avatar size="sm">
+            <Avatar.Image
+              alt="HeroUI"
+              src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/heroui_isotipo.png"
+            />
+            <Avatar.Fallback>H</Avatar.Fallback>
+          </Avatar>
+          <div className="flex h-full flex-col items-start justify-center">
+            <div className="flex items-center gap-0.5">
+              <span className="text-sm leading-4 font-semibold">HeroUI</span>
+              <VerifiedBadgeIcon height={18} width={18} />
+            </div>
+            <span className="text-sm tracking-tight text-muted">@hero_ui</span>
+          </div>
+        </div>
+      </Card.Header>
+      <Card.Content className="flex-row text-start">
+        <p className="ps-px text-sm font-medium">
+          {t.bio}&nbsp;
+          <br />
+          <span aria-label={t.confettiLabel} role="img">
+            🚀
+          </span>
+          &nbsp;{t.bioSuffix}&nbsp;
+        </p>
+      </Card.Content>
+      <Card.Footer className="gap-2">
+        <div className="flex gap-1">
+          <p className="text-sm font-semibold">4</p>
+          <p className="text-sm text-muted">{t.following}</p>
+        </div>
+        <div className="flex gap-1">
+          <p className="text-sm font-semibold">97.1K</p>
+          <p className="text-sm text-muted">{t.followers}</p>
+        </div>
+      </Card.Footer>
+    </Card>
+  );
+}

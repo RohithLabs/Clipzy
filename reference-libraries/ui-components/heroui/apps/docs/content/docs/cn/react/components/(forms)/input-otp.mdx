@@ -1,0 +1,246 @@
+---
+title: InputOTP 一次性密码输入
+description: 用于验证码与安全认证的一次性密码输入组件
+links:
+  source: input-otp/input-otp.tsx
+  styles: input-otp.css
+  storybook: Components/Forms/InputOTP
+  figma: true
+---
+
+## 用法
+
+```tsx
+import { InputOTP } from '@heroui/react';
+```
+
+<ComponentPreview name="input-otp-basic" />
+
+## 组件结构
+
+```tsx
+import { InputOTP } from '@heroui/react';
+
+export default () => (
+  <InputOTP maxLength={6}>
+    <InputOTP.Group>
+      <InputOTP.Slot index={0} />
+      <InputOTP.Slot index={1} />
+      {/* ...rest of the slots */}
+    </InputOTP.Group>
+    <InputOTP.Separator />
+    <InputOTP.Group>
+      <InputOTP.Slot index={3} />
+      {/* ...rest of the slots */}
+    </InputOTP.Group>
+  </InputOTP>
+)
+```
+
+> **InputOTP** 基于 [@guilherme_rodz](https://twitter.com/guilherme_rodz) 的 [input-otp](https://github.com/guilhermerodz/input-otp) 构建，为 OTP 输入组件提供灵活且无障碍的基础。
+
+## 示例
+
+### 变体
+
+InputOTP 组件支持两种视觉变体：
+
+- **`primary`**（默认）- 标准样式带阴影，适用于大多数场景
+- **`secondary`** - 低强调变体无阴影，适用于 Surface 组件内
+
+<ComponentPreview name="input-otp-variants" />
+
+### 表面样式
+
+在 [Surface](/docs/components/surface) 内使用时，请使用 `variant="secondary"` 以应用适合 Surface 背景的低强调变体。
+
+<ComponentPreview name="input-otp-on-surface" />
+
+### 禁用状态
+
+<ComponentPreview name="input-otp-disabled" />
+
+### 四位验证码
+
+<ComponentPreview name="input-otp-four-digits" />
+
+### 受控组件
+
+控制 value 以与状态同步、清空输入或实现自定义校验。
+
+<ComponentPreview name="input-otp-controlled" />
+
+### 输入完成回调
+
+使用 `onComplete` 回调在所有 slot 填满时触发操作。
+
+<ComponentPreview name="input-otp-on-complete" />
+
+### 表单示例
+
+完整的双因素认证表单，含校验与提交。
+
+<ComponentPreview name="input-otp-form-example" />
+
+### 限定格式
+
+使用 `pattern` prop 限制输入字符。HeroUI 导出 `REGEXP_ONLY_CHARS`、`REGEXP_ONLY_DIGITS` 等常用模式。
+
+<ComponentPreview name="input-otp-with-pattern" />
+
+### 带校验
+
+配合 `isInvalid` 与校验消息展示错误。
+
+<ComponentPreview name="input-otp-with-validation" />
+
+## 自定义样式
+
+### Tailwind CSS
+
+<ComponentPreview name="input-otp-custom-styles" />
+
+### 全局 CSS
+
+可使用 `@layer components` 指令自定义 InputOTP 组件类。
+[了解更多](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)。
+
+```css
+@layer components {
+  .input-otp {
+    @apply gap-3;
+  }
+
+  .input-otp__slot {
+    @apply size-12 rounded-xl border-2 font-bold;
+  }
+
+  .input-otp__slot[data-active="true"] {
+    @apply border-accent-500 ring-2 ring-accent-200;
+  }
+
+  .input-otp__separator {
+    @apply w-2 h-1 bg-border-strong rounded-full;
+  }
+}
+```
+
+## 样式参考
+
+HeroUI 遵循 [BEM](https://getbem.com/) 方法论，确保组件变体与状态可复用且易于自定义。
+
+### CSS 类
+
+InputOTP 组件使用以下 CSS 类（[查看源码样式](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/input-otp.css)）：
+
+#### 基础类 [!toc]
+- `.input-otp` - 基础容器
+- `.input-otp__container` - input-otp 库的内部容器
+- `.input-otp__group` - slot 组
+- `.input-otp__slot` - 单个输入 slot
+- `.input-otp__slot-value` - slot 内的字符
+- `.input-otp__caret` - 闪烁光标指示器
+- `.input-otp__separator` - 组之间的视觉分隔符
+
+#### 状态类 [!toc]
+- `.input-otp__slot[data-active="true"]` - 当前激活的 slot
+- `.input-otp__slot[data-filled="true"]` - 含字符的 slot
+- `.input-otp__slot[data-disabled="true"]` - 禁用的 slot
+- `.input-otp__slot[data-invalid="true"]` - 无效的 slot
+- `.input-otp__container[data-disabled="true"]` - 禁用的容器
+
+### 交互状态
+
+组件同时支持 CSS 伪类与 data 属性：
+
+- **Hover**：slot 上 `:hover` 或 `[data-hovered="true"]`
+- **Active**：slot 上 `[data-active="true"]`（当前聚焦）
+- **Filled**：slot 上 `[data-filled="true"]`（含字符）
+- **Disabled**：容器与 slot 上 `[data-disabled="true"]`
+- **Invalid**：slot 上 `[data-invalid="true"]`
+
+## API 参考
+
+### InputOTP
+
+InputOTP 基于 [input-otp](https://github.com/guilhermerodz/input-otp) 库构建，并附加额外特性。
+
+#### Base Props
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `maxLength` | `number` | - | **必填。** 输入 slot 数量 |
+| `value` | `string` | - | 受控值（未提供则为非受控） |
+| `onChange` | `(value: string) => void` | - | 值变化时的回调 |
+| `onComplete` | `(value: string) => void` | - | 所有 slot 填满时的回调 |
+| `className` | `string` | - | 容器的附加 CSS 类 |
+| `containerClassName` | `string` | - | 内部容器的 CSS 类 |
+| `variant` | `"primary" \| "secondary"` | `"primary"` | 视觉变体。`primary` 为默认带阴影样式；`secondary` 为低强调无阴影，适用于 Surface 内 |
+| `children` | `React.ReactNode` | - | InputOTP.Group、InputOTP.Slot 与 InputOTP.Separator 组件 |
+
+#### Validation Props
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `isDisabled` | `boolean` | `false` | 是否禁用 |
+| `isInvalid` | `boolean` | `false` | 是否处于无效状态 |
+| `validationErrors` | `string[]` | - | 服务端或自定义校验错误 |
+| `validationDetails` | `ValidityState` | - | HTML5 校验详情 |
+
+#### Input Props
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `pattern` | `string` | - | 允许字符的正则模式（如 `REGEXP_ONLY_DIGITS`） |
+| `textAlign` | `'left' \| 'center' \| 'right'` | `'left'` | slot 内文本对齐 |
+| `inputMode` | `'numeric' \| 'text' \| 'decimal' \| 'tel' \| 'search' \| 'email' \| 'url'` | `'numeric'` | 移动设备虚拟键盘类型 |
+| `placeholder` | `string` | - | 空 slot 的占位文本 |
+| `pasteTransformer` | `(text: string) => string` | - | 转换粘贴文本（如移除连字符） |
+
+#### Form Props
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `name` | `string` | - | 表单提交的 name 属性 |
+| `autoFocus` | `boolean` | - | 挂载时是否聚焦第一个 slot |
+
+### InputOTP.Group
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `className` | `string` | - | 组的附加 CSS 类 |
+| `children` | `React.ReactNode` | - | InputOTP.Slot 组件 |
+
+### InputOTP.Slot
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `index` | `number` | - | **必填。** slot 的从零开始索引 |
+| `className` | `string` | - | slot 的附加 CSS 类 |
+
+### InputOTP.Separator
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|---------|-------------|
+| `className` | `string` | - | 分隔符的附加 CSS 类 |
+
+### Exported Patterns
+
+HeroUI 重新导出 input-otp 的常用正则模式以便使用：
+
+```tsx
+import { REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS_AND_CHARS } from '@heroui/react';
+
+// Use with pattern prop
+<InputOTP pattern={REGEXP_ONLY_DIGITS} maxLength={6}>
+  {/* ... */}
+</InputOTP>
+```
+
+- **REGEXP_ONLY_DIGITS** - 仅数字字符（0-9）
+- **REGEXP_ONLY_CHARS** - 仅字母字符（a-z、A-Z）
+- **REGEXP_ONLY_DIGITS_AND_CHARS** - 字母数字字符（0-9、a-z、A-Z）
+
+## 相关组件
+
+<RelatedComponents component="inputotp" />

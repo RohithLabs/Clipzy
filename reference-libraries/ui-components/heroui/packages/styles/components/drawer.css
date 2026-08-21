@@ -1,0 +1,298 @@
+/* -------------------------------------------------------------------------------------------------
+ * Drawer Component Styles
+ * Block: drawer
+ * -----------------------------------------------------------------------------------------------*/
+
+/**
+ * Element: trigger - the element that opens the drawer
+ */
+.drawer__trigger {
+  @apply inline-block cursor-(--cursor-interactive);
+
+  /**
+   * Transitions
+   * CRITICAL: motion-reduce must be AFTER transition for correct override specificity
+   */
+  transition:
+    transform 250ms var(--ease-out-quart),
+    background-color 150ms var(--ease-smooth),
+    box-shadow 150ms var(--ease-out);
+  @apply motion-reduce:transition-none;
+
+  /* Focus state */
+  &:focus-visible:not(:focus),
+  &[data-focus-visible="true"] {
+    @apply status-focused;
+  }
+
+  /* Disabled state */
+  &:disabled,
+  &[aria-disabled="true"] {
+    @apply status-disabled;
+  }
+
+  /* Active/pressed state */
+  &:active,
+  &[data-pressed="true"] {
+    transform: scale(0.97);
+  }
+}
+
+/**
+ * Element: backdrop - the overlay behind the drawer
+ */
+.drawer__backdrop {
+  @apply fixed inset-0 z-50;
+  @apply h-(--visual-viewport-height) w-full;
+  opacity: 1;
+  transition: opacity 250ms cubic-bezier(0.32, 0.72, 0, 1);
+
+  &[data-entering="true"] {
+    opacity: 0;
+  }
+
+  &[data-exiting="true"] {
+    opacity: 0;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  &[data-exiting="true"],
+  &[data-entering="true"] {
+    will-change: opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/**
+ * Modifier: backdrop--transparent
+ */
+.drawer__backdrop--transparent {
+  @apply bg-transparent;
+}
+
+/**
+ * Modifier: backdrop--opaque
+ */
+.drawer__backdrop--opaque {
+  @apply bg-backdrop;
+}
+
+/**
+ * Modifier: backdrop--blur
+ */
+.drawer__backdrop--blur {
+  @apply bg-backdrop backdrop-blur-md;
+}
+
+/**
+ * Element: content - the positioning wrapper for the drawer panel
+ */
+.drawer__content {
+  @apply pointer-events-none;
+  @apply fixed inset-0 z-50 flex;
+  @apply h-(--visual-viewport-height) w-full min-w-0;
+}
+
+/**
+ * Modifier: content--bottom (default)
+ * Slides up from the bottom edge
+ */
+.drawer__content--bottom {
+  @apply items-end;
+}
+
+/**
+ * Modifier: content--top
+ * Slides down from the top edge
+ */
+.drawer__content--top {
+  @apply items-start;
+}
+
+/**
+ * Modifier: content--left
+ * Slides in from the left edge
+ */
+.drawer__content--left {
+  @apply justify-start;
+}
+
+/**
+ * Modifier: content--right
+ * Slides in from the right edge
+ */
+.drawer__content--right {
+  @apply justify-end;
+}
+
+/**
+ * Element: dialog - the drawer panel itself
+ */
+.drawer__dialog {
+  @apply relative;
+  @apply flex flex-col;
+  @apply bg-overlay shadow-overlay outline-none;
+  @apply p-6;
+  @apply pointer-events-auto;
+
+  --drawer-enter-duration: 250ms;
+  --drawer-exit-duration: 200ms;
+  --drawer-enter-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --drawer-exit-ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  will-change: translate;
+  transition: translate var(--drawer-enter-duration) var(--drawer-enter-ease);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  /* Bottom/top placement: full width, auto height */
+  &[data-placement="bottom"] {
+    @apply w-full;
+    @apply max-h-[85vh];
+    border-start-start-radius: min(32px, var(--radius-2xl));
+    border-start-end-radius: min(32px, var(--radius-2xl));
+  }
+
+  &[data-placement="top"] {
+    @apply w-full;
+    @apply max-h-[85vh];
+    border-end-start-radius: min(32px, var(--radius-2xl));
+    border-end-end-radius: min(32px, var(--radius-2xl));
+  }
+
+  /* Left/right placement: auto width, full height */
+  &[data-placement="left"] {
+    @apply h-full rounded-none;
+    @apply w-80 max-w-[85vw] sm:w-96;
+  }
+
+  &[data-placement="right"] {
+    @apply h-full rounded-none;
+    @apply w-80 max-w-[85vw] sm:w-96;
+  }
+}
+
+[data-exiting="true"] .drawer__dialog {
+  transition-duration: var(--drawer-exit-duration);
+  transition-timing-function: var(--drawer-exit-ease);
+}
+
+.drawer__content--left .drawer__dialog,
+.drawer__content--right .drawer__dialog,
+.drawer__content--top .drawer__dialog,
+.drawer__content--bottom .drawer__dialog {
+  translate: 0 0;
+}
+
+.drawer__content--left[data-entering="true"] .drawer__dialog,
+.drawer__content--left[data-exiting="true"] .drawer__dialog {
+  translate: -100% 0;
+}
+
+.drawer__content--right[data-entering="true"] .drawer__dialog,
+.drawer__content--right[data-exiting="true"] .drawer__dialog {
+  translate: 100% 0;
+}
+
+.drawer__content--top[data-entering="true"] .drawer__dialog,
+.drawer__content--top[data-exiting="true"] .drawer__dialog {
+  translate: 0 -100%;
+}
+
+.drawer__content--bottom[data-entering="true"] .drawer__dialog,
+.drawer__content--bottom[data-exiting="true"] .drawer__dialog {
+  translate: 0 100%;
+}
+
+.drawer__dialog--top {
+  @apply pb-2;
+  .drawer__handle {
+    @apply pb-0;
+  }
+}
+
+/**
+ * Element: header - the top section with the title
+ */
+.drawer__header {
+  @apply flex flex-col gap-3;
+  @apply mb-0;
+}
+
+/**
+ * Element: heading - the main title text
+ */
+.drawer__heading {
+  @apply align-middle;
+  @apply text-base font-medium text-foreground;
+}
+
+/**
+ * Element: body - the main content area
+ * touch-action: pan-y allows vertical scrolling while the dialog captures drag gestures
+ */
+.drawer__body {
+  @apply min-h-0 flex-1 scrollbar;
+  @apply text-sm leading-[1.43] text-muted;
+  @apply -m-[3px] my-0 p-[3px];
+  @apply overflow-y-auto overscroll-contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/**
+ * Element: footer - the bottom action section
+ */
+.drawer__footer {
+  @apply flex flex-row items-center justify-end gap-2;
+  @apply mt-0;
+}
+
+/**
+ * Element: handle - visual drag handle indicator
+ */
+.drawer__handle {
+  @apply flex items-center justify-center;
+  @apply pb-2;
+
+  /* The handle bar */
+  & > [data-slot="drawer-handle-bar"] {
+    @apply h-1 w-9 rounded-xs;
+    @apply bg-separator;
+  }
+}
+
+/**
+ * Element: close-trigger - the close button
+ */
+.drawer__close-trigger {
+  @apply absolute end-4 top-4;
+}
+
+/**
+ * Elements Spacing
+ */
+.drawer__header + .drawer__body {
+  @apply mt-2;
+}
+
+.drawer__header + .drawer__footer {
+  @apply mt-5;
+}
+
+.drawer__body + .drawer__footer {
+  @apply mt-5;
+}
+
+.drawer__handle + .drawer__header {
+  @apply mt-0;
+}
+
+.drawer__handle + .drawer__body {
+  @apply mt-0;
+}

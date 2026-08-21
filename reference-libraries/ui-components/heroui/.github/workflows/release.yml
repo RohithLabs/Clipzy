@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (publish without actually uploading to npm)"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install
+        uses: ./.github/common-actions/install
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@11
+
+      - name: Determine previous tag
+        id: prev-tag
+        run: |
+          PREV=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | grep -vFxf <(git tag --points-at HEAD) | head -1)
+          echo "tag=${PREV:-}" >> $GITHUB_OUTPUT
+          echo "Previous tag: ${PREV:-none}"
+
+      - name: Create GitHub Release
+        if: ${{ !inputs.dry_run }}
+        run: npx changelogithub --from ${{ steps.prev-tag.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Publish @heroui/styles
+        id: publish-styles
+        working-directory: packages/styles
+        run: |
+          mkdir -p "$RUNNER_TEMP/heroui-release"
+          PACKAGE_TARBALL="$(node -p "const pkg = require('./package.json'); pkg.name.replace('@', '').replace('/', '-') + '-' + pkg.version + '.tgz'")"
+          pnpm pack --pack-destination "$RUNNER_TEMP/heroui-release"
+          npm publish "$RUNNER_TEMP/heroui-release/$PACKAGE_TARBALL" --access public ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Publish @heroui/react
+        if: steps.publish-styles.outcome == 'success'
+        working-directory: packages/react
+        run: |
+          mkdir -p "$RUNNER_TEMP/heroui-release"
+          PACKAGE_TARBALL="$(node -p "const pkg = require('./package.json'); pkg.name.replace('@', '').replace('/', '-') + '-' + pkg.version + '.tgz'")"
+          pnpm pack --pack-destination "$RUNNER_TEMP/heroui-release"
+          npm publish "$RUNNER_TEMP/heroui-release/$PACKAGE_TARBALL" --access public ${{ inputs.dry_run && '--dry-run' || '' }}

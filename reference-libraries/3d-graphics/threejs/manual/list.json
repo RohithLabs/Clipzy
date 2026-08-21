@@ -1,0 +1,87 @@
+{
+	"Getting Started": {
+		"Installation": "installation",
+		"Creating a Scene": "creating-a-scene",
+		"Creating Text": "creating-text",
+		"Drawing Lines": "drawing-lines",
+		"FAQ": "faq",
+		"Libraries and Plugins": "libraries-and-plugins",
+		"Loading 3D Models": "loading-3d-models",
+		"Uniform Types": "uniform-types",
+		"Useful Links": "useful-links",
+		"WebGL Compatibility Check": "webgl-compatibility-check"
+	},
+	"Next Steps": {
+		"Animation System": "animation-system",
+		"Color Management": "color-management",
+		"How to create VR content": "how-to-create-vr-content",
+		"How to dispose of Objects": "how-to-dispose-of-objects",
+		"How to update Things": "how-to-update-things",
+		"How to use Post Processing": "how-to-use-post-processing",
+		"Matrix Transformations": "matrix-transformations"
+	},
+	"---": {},
+	"Basics": {
+		"Fundamentals": "fundamentals",
+		"Responsive Design": "responsive",
+		"Prerequisites": "prerequisites",
+		"Setup": "setup"
+	},
+	"Fundamentals": {
+		"Primitives": "primitives",
+		"Scenegraph": "scenegraph",
+		"Materials": "materials",
+		"Textures": "textures",
+		"Lights": "lights",
+		"Cameras": "cameras",
+		"Shadows": "shadows",
+		"Fog": "fog",
+		"Render Targets": "rendertargets",
+		"Custom BufferGeometry": "custom-buffergeometry",
+		"Physics": "physics"
+	},
+	"Tips": {
+		"Rendering On Demand": "rendering-on-demand",
+		"Debugging JavaScript": "debugging-javascript",
+		"Debugging GLSL": "debugging-glsl",
+		"Taking a screenshot": "tips#screenshot",
+		"Prevent the Canvas Being Cleared": "tips#preservedrawingbuffer",
+		"Get Keyboard Input From a Canvas": "tips#tabindex",
+		"Make the Canvas Transparent": "tips#transparent-canvas",
+		"Use three.js as Background in HTML": "tips#html-background"
+	},
+	"Optimization": {
+		"Optimizing Lots of Objects": "optimize-lots-of-objects",
+		"Optimizing Lots of Objects Animated": "optimize-lots-of-objects-animated",
+		"Using OffscreenCanvas in a Web Worker": "offscreencanvas"
+	},
+	"Solutions": {
+		"Load an .OBJ file": "load-obj",
+		"Load a .GLTF file": "load-gltf",
+		"Add a Background or Skybox": "backgrounds",
+		"How to Draw Transparent Objects": "transparency",
+		"Multiple Canvases, Multiple Scenes": "multiple-scenes",
+		"Picking Objects with the mouse": "picking",
+		"Post Processing": "post-processing",
+		"Using Shadertoy shaders": "shadertoy",
+		"Aligning HTML Elements to 3D": "align-html-elements-to-3d",
+		"Using Indexed Textures for Picking and Color": "indexed-textures",
+		"Using A Canvas for Dynamic Textures": "canvas-textures",
+		"Billboards and Facades": "billboards",
+		"Freeing Resources": "cleanup",
+		"Making Voxel Geometry (Minecraft)": "voxel-geometry",
+		"Start making a Game": "game"
+	},
+	"WebGPU": {
+		"WebGPURenderer": "webgpurenderer",
+		"Post-Processing": "webgpu-postprocessing"
+	},
+	"WebXR": {
+		"VR - Basics": "webxr-basics",
+		"VR - Look To Select": "webxr-look-to-select",
+		"VR - Point To Select": "webxr-point-to-select"
+	},
+	"Reference": {
+		"Material Table": "material-table"
+	}
+}

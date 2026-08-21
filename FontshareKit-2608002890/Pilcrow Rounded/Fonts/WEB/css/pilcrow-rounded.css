@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Pilcrow Rounded
+* Designed by: Satya Rajpurohit
+* URL: https://www.fontshare.com/fonts/pilcrow-rounded
+* © 2026 Indian Type Foundry
+*
+* Pilcrow Rounded Regular 
+
+*
+*/
+@font-face {
+  font-family: 'PilcrowRounded-Regular';
+  src: url('../fonts/PilcrowRounded-Regular.woff2') format('woff2'),
+       url('../fonts/PilcrowRounded-Regular.woff') format('woff'),
+       url('../fonts/PilcrowRounded-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+

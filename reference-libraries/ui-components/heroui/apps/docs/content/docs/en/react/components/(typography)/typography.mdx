@@ -1,0 +1,119 @@
+---
+title: Typography
+description: A semantic typography primitive for headings, body copy, and inline code built on React Aria Components Text.
+links:
+  source: typography/typography.tsx
+  styles: typography.css
+  storybook: Components/Typography
+---
+
+## Usage
+
+```tsx
+import {Typography} from "@heroui/react";
+```
+
+<ComponentPreview name="typography-default" />
+
+## Anatomy
+
+`Typography` maps visual `type` values to semantic elements by default.
+
+```tsx
+import {Typography} from "@heroui/react";
+
+export default () => (
+  <Typography type="h1">Heading</Typography>
+);
+```
+
+## Examples
+
+### Scale
+
+<ComponentPreview name="typography-typography-scale" />
+
+### Primitives
+
+<ComponentPreview name="typography-primitives" />
+
+- `Typography.Heading` maps `level={1..6}` to `type="h1"` through `type="h6"`.
+- `Typography.Paragraph` maps `size="base" | "sm" | "xs"` to body text styles.
+- `Typography.Code` maps to the inline code style.
+- `Typography.Prose` styles rich content passed as regular HTML children.
+
+### Prose
+
+<ComponentPreview name="typography-prose" />
+
+### Render Props
+
+<ComponentPreview name="typography-render-props" />
+
+Use the React Aria Components-style `render` prop when you need to customize the rendered element.
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="typography-custom-styles" />
+
+### Global CSS
+
+To customize the Typography component classes, you can use the `@layer components` directive. [Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .typography--h1 {
+    @apply font-extrabold tracking-tight;
+  }
+
+  .typography--code {
+    @apply rounded-md bg-default-100 font-mono dark:bg-default-50/20;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Typography component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/typography.css)):
+
+#### Base Classes [!toc]
+
+- `.typography` - Base typography primitive
+- `.typography-prose` - Rich prose container
+
+#### Type Classes [!toc]
+
+- `.typography--h1` through `.typography--h6`
+- `.typography--body`, `.typography--body-sm`, `.typography--body-xs`
+- `.typography--code`
+
+#### Modifier Classes [!toc]
+
+- `.typography--align-start`, `.typography--align-center`, `.typography--align-end`, `.typography--align-justify`
+- `.typography--color-default`, `.typography--color-muted`
+- `.typography--truncate`
+- `.typography--weight-normal`, `.typography--weight-medium`, `.typography--weight-semibold`, `.typography--weight-bold`
+
+## API Reference
+
+### Typography
+
+| Prop       | Type                                                                                           | Default     | Description                                    |
+| ---------- | ---------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------- |
+| `type`     | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6' \| 'body' \| 'body-sm' \| 'body-xs' \| 'code'` | `'body'`    | Semantic typography style.                     |
+| `align`    | `'start' \| 'center' \| 'end' \| 'justify'`                                                 | `'start'`   | Text alignment.                                |
+| `color`    | `'default' \| 'muted'`                                                                        | `'default'` | Text color.                                    |
+| `weight`   | `'normal' \| 'medium' \| 'semibold' \| 'bold'`                                              | -           | Font weight override.                          |
+| `truncate` | `boolean`                                                                                      | -           | Truncates the text to one line with ellipsis.  |
+| `render`   | `DOMRenderFunction`                                                                            | -           | Custom render function from React Aria.        |
+| `children` | `ReactNode`                                                                                    | -           | Text content.                                  |
+
+## Related Components
+
+<RelatedComponents component="typography" />

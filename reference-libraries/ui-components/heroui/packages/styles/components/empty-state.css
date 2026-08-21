@@ -1,0 +1,4 @@
+/* Base empty-state styles */
+.empty-state {
+  @apply p-2 text-sm text-muted;
+}

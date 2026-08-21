@@ -1,0 +1,126 @@
+---
+title: ScrollShadow
+description: Apply visual shadows to indicate scrollable content overflow with automatic detection of scroll position.
+links:
+  source: scroll-shadow/scroll-shadow.tsx
+  styles: scroll-shadow.css
+  storybook: Components/Utilities/ScrollShadow
+  figma: true
+---
+
+## Usage
+
+```tsx
+import { ScrollShadow } from "@heroui/react";
+```
+
+<ComponentPreview name="scroll-shadow-default" />
+
+## Examples
+
+### Orientation
+
+<ComponentPreview name="scroll-shadow-orientation" />
+
+### Shadow Size
+
+<ComponentPreview name="scroll-shadow-size" />
+
+### With Card
+
+<ComponentPreview name="scroll-shadow-with-card" />
+
+### Hide Scroll Bar
+
+<ComponentPreview name="scroll-shadow-hide-scroll-bar" />
+
+### Visibility Change
+
+<ComponentPreview name="scroll-shadow-visibility-change" />
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="scroll-shadow-custom-styles" />
+
+### Global CSS
+
+To customize the ScrollShadow component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .scroll-shadow {
+    @apply rounded-xl border border-default-200;
+  }
+
+  .scroll-shadow--vertical {
+    @apply pr-2; /* Add padding for custom scrollbar styling */
+  }
+
+  .scroll-shadow--horizontal {
+    @apply pb-2;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The ScrollShadow component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/scroll-shadow.css)):
+
+#### Base Classes [!toc]
+
+- `.scroll-shadow` - Root container element
+
+#### Orientation Variants [!toc]
+
+- `.scroll-shadow--vertical` - Vertical scrolling (default)
+- `.scroll-shadow--horizontal` - Horizontal scrolling
+
+#### State Modifiers [!toc]
+
+- `.scroll-shadow--hide-scrollbar` - Hides native scrollbar
+
+### CSS Variables
+
+The ScrollShadow component uses CSS variables to size the fade mask and reserve space for visible native scrollbars:
+
+| Variable                         | Default                             | Description                                                                                                      |
+| -------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `--scroll-shadow-size`           | `40px`                              | Controls the fade gradient size. This is set from the `size` prop.                                               |
+| `--scroll-shadow-scrollbar-size` | `10px` (`0px` when `hideScrollBar`) | Reserves a solid mask gutter for the native scrollbar so the fade does not cover it. Override for wider scrollbars. |
+
+### Data Attributes
+
+The component uses data attributes to control shadow visibility:
+
+- **Scroll States**: `[data-top-scroll]`, `[data-bottom-scroll]`, `[data-left-scroll]`, `[data-right-scroll]` - Applied when content can be scrolled in that direction
+- **Combined States**: `[data-top-bottom-scroll]`, `[data-left-right-scroll]` - Applied when content can be scrolled in both directions
+- **Orientation**: `[data-orientation="vertical"]` or `[data-orientation="horizontal"]` - Indicates scroll direction
+- **Size**: `[data-scroll-shadow-size]` - Contains the shadow gradient size value
+
+## API Reference
+
+### ScrollShadow
+
+| Prop                 | Type                                                                          | Default      | Description                                             |
+| -------------------- | ----------------------------------------------------------------------------- | ------------ | ------------------------------------------------------- |
+| `orientation`        | `"vertical"` \| `"horizontal"`                                                | `"vertical"` | The scroll direction                                    |
+| `variant`            | `"fade"`                                                                      | `"fade"`     | The visual shadow effect style                          |
+| `size`               | `number`                                                                      | `40`         | The shadow gradient size in pixels                      |
+| `offset`             | `number`                                                                      | `0`          | The scroll offset before showing shadows (in pixels)    |
+| `hideScrollBar`      | `boolean`                                                                     | `false`      | Whether to hide the native scrollbar                    |
+| `isEnabled`          | `boolean`                                                                     | `true`       | Whether scroll shadow detection is enabled              |
+| `visibility`         | `"auto"` \| `"both"` \| `"top"` \| `"bottom"` \| `"left"` \| `"right"` \| `"none"` | `"auto"`     | Controlled shadow visibility state                      |
+| `onVisibilityChange` | `(visibility: ScrollShadowVisibility) => void`                                | -            | Callback invoked when shadow visibility changes         |
+| `className`          | `string`                                                                      | -            | Additional CSS classes to apply to the root element     |
+| `children`           | `ReactNode`                                                                   | -            | The scrollable content                                  |
+
+## Related Components
+
+<RelatedComponents component="scrollshadow" />

@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const de: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — animierter SVG-Avatar',
-    botAria: 'Animierter tibsy Avatar'
+    name: 'clipzy',
+    title: 'clipzy — animierter Vektor-Avatar & Clip-Videostudio',
+    botAria: 'Animierter clipzy Avatar'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const de: typeof fr = {
     nav: 'Bereiche',
     customize: 'Anpassen',
     animations: 'Animationen',
+    combos: 'Combos & Story',
+    reel: 'Reel Studio',
     lab3d: '3D-Labor',
     settings: 'Einstellungen'
   },
@@ -29,6 +31,10 @@ const de: typeof fr = {
     nose: 'Nase',
     cheeks: 'Wangen',
     mouth: 'Mund',
+    hats: 'Hüte & Kopfschmuck',
+    glasses: 'Brillen & Visiere',
+    props: 'Requisiten & Objekte',
+    auras: 'Aura & Energie-FX',
     color: 'Farbe'
   },
 
@@ -69,7 +75,7 @@ const de: typeof fr = {
 
   timeline: {
     play: 'Wiedergabe starten',
-    pause: 'Wiedergabe stoppen',
+    pause: 'Wiedergabe anhalten',
     addAnimation: 'Animation hinzufügen',
     preview: 'Vorschau',
     export: 'Montage exportieren',
@@ -83,17 +89,17 @@ const de: typeof fr = {
     cancel: 'Abbrechen',
     nameCreateTitle: 'Neuer Zyklus',
     nameRenameTitle: 'Zyklus umbenennen',
-    nameField: 'Zyklusname',
+    nameField: 'Name des Zyklus',
     nameCreate: 'Erstellen',
     nameRename: 'Umbenennen',
-    removeTitle: '"{name}" löschen?',
+    removeTitle: '„{name}“ löschen?',
     removeDetail:
-      'Diese Sequenz geht mitsamt ihrer Animation verloren. | Diese Sequenz geht mitsamt ihrer {n} Animationen verloren.',
+      'Diese Sequenz geht zusammen mit ihrer Animation verloren. | Diese Sequenz geht zusammen mit ihren {n} Animationen verloren.',
     removeConfirm: 'Löschen'
   },
 
   cycles: {
-    defaultName: 'Standard-Zyklus',
+    defaultName: 'Standardzyklus',
     newName: 'Mein Zyklus',
     menuNew: 'Neuer Zyklus',
     menuRenameAria: '{name} umbenennen',
@@ -110,20 +116,20 @@ const de: typeof fr = {
     language: 'Sprache',
     about: 'Über',
     credits: 'Mit ❤️ erstellt von {name}',
-    creditsAria: 'Projektentwickler',
+    creditsAria: 'Jérémy auf X, öffnet in neuem Tab',
     github: 'Projekt auf GitHub ansehen',
-    githubAria: 'Projekt-Repository auf GitHub'
+    githubAria: 'Das Projekt-Repository auf GitHub, öffnet in neuem Tab'
   },
 
   states: {
-    idle: 'Ruhezustand',
-    thinking: 'Nachdenklich',
+    idle: 'Ruhe',
+    thinking: 'Nachdenken',
     wink: 'Zwinkern',
     wide: 'Große Augen',
-    alert: 'Aufmerksam',
+    alert: 'Alarm',
     notify: 'Benachrichtigung',
     exclaim: 'Ausruf',
-    sleep: 'Schlafen',
+    sleep: 'Schlaf',
     egg: 'Ei',
     hexagon: 'Sechseck',
     play: 'Spielen',
@@ -138,6 +144,22 @@ const de: typeof fr = {
     nope: 'Kopfschütteln',
     hello: 'Hallo',
     sleepy: 'Schläfrig',
+    power: 'Power-Schub',
+    thuglife: 'Thug Life',
+    heart: 'Herzschlag',
+    disco: 'Disco-Tanz',
+    glitch: 'Cyber-Glitch',
+    vortex: 'Raum-Vortex',
+    ninja: 'Ninja-Schatten',
+    retro: '8-Bit Retro',
+    rocket: 'Raketenstart',
+    freeze: 'Eis-Frost',
+    dizzy: 'Schwindel-Sterne',
+    royal: 'Königskrone',
+    djbeat: 'DJ-Bassdrop',
+    magic: 'Zauberfunken',
+    action: 'Film-Action',
+    hyper: 'Koffein-Rausch',
     swirl: 'Wirbel'
   },
 

@@ -1,0 +1,149 @@
+---
+title: Meter
+description: A meter represents a quantity within a known range, or a fractional value.
+
+links:
+  rac: Meter
+  source: meter/meter.tsx
+  styles: meter.css
+  storybook: Components/Feedback/Meter
+---
+
+## Usage
+
+```tsx
+import { Meter, Label } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="meter-basic"
+/>
+
+## Anatomy
+
+```tsx
+import { Meter, Label } from '@heroui/react';
+
+export default () => (
+  <Meter value={60}>
+    <Label>Storage</Label>
+    <Meter.Output />
+    <Meter.Track>
+      <Meter.Fill />
+    </Meter.Track>
+  </Meter>
+);
+```
+
+## Examples
+
+### Sizes
+
+<ComponentPreview
+  name="meter-sizes"
+/>
+
+### Colors
+
+<ComponentPreview
+  name="meter-colors"
+/>
+
+### Without Label
+
+When no visible label is needed, use `aria-label` for accessibility.
+
+<ComponentPreview
+  name="meter-without-label"
+/>
+
+### Custom Value Scale
+
+Use `minValue`, `maxValue`, and `formatOptions` to customize the value range and display format.
+
+<ComponentPreview
+  name="meter-custom-value"
+/>
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="meter-custom-styles" />
+
+### Global CSS
+
+To customize the Meter component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .meter {
+    @apply w-full gap-2;
+  }
+
+  .meter__track {
+    @apply h-3 rounded-full;
+  }
+
+  .meter__fill {
+    @apply rounded-full;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Meter component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/meter.css)):
+
+#### Base & Element Classes [!toc]
+- `.meter` - Base container (grid layout)
+- `.meter__output` - Value text display
+- `.meter__track` - Track background
+- `.meter__fill` - Filled portion of the track
+
+#### Size Classes [!toc]
+- `.meter--sm` - Small size variant (thinner track)
+- `.meter--md` - Medium size variant (default)
+- `.meter--lg` - Large size variant (thicker track)
+
+#### Color Classes [!toc]
+- `.meter--default` - Default color variant
+- `.meter--accent` - Accent color variant
+- `.meter--success` - Success color variant
+- `.meter--warning` - Warning color variant
+- `.meter--danger` - Danger color variant
+
+## API Reference
+
+### Meter
+
+Inherits from [React Aria Meter](https://react-spectrum.adobe.com/react-aria/Meter.html).
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | `0` | The current value |
+| `minValue` | `number` | `0` | The minimum value |
+| `maxValue` | `number` | `100` | The maximum value |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the meter track |
+| `color` | `"default" \| "accent" \| "success" \| "warning" \| "danger"` | `"accent"` | Color of the fill bar |
+| `formatOptions` | `Intl.NumberFormatOptions` | `{style: 'percent'}` | Number format for the value display |
+| `valueLabel` | `ReactNode` | - | Custom value label content |
+| `children` | `ReactNode \| (values: MeterRenderProps) => ReactNode` | - | Content or render prop |
+
+### Render Props
+
+When using the render prop pattern, these values are provided:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `percentage` | `number` | The percentage of the meter (0-100) |
+| `valueText` | `string` | The formatted value text |
+
+## Related Components
+
+<RelatedComponents component="meter" />

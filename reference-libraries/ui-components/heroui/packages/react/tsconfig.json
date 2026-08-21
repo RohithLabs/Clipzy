@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@heroui/standard/tsconfig/react.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "tests", "../testing/globals.d.ts"],
+  "exclude": ["node_modules", "**/*.stories.*", "dist", ".rollup.cache"]
+}

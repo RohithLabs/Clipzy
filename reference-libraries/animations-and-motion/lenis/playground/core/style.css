@@ -1,0 +1,66 @@
+#scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#nested-horizontal {
+  width: 50vw;
+  margin: 0 auto;
+  /* height: 200px; */
+  overflow-x: auto;
+  overscroll-behavior: contain;
+
+  #nested-horizontal-content {
+    width: 1000px;
+    height: 100%;
+  }
+}
+
+#nested {
+  width: 50vw;
+  margin: 0 auto;
+  height: 200px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* overflow-x: auto; */
+}
+
+#debug {
+  position: fixed;
+  top: 4rem;
+}
+
+/* html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  overflow-y: auto;
+  height: 100%;
+} */
+
+/* this prevents UI to collapse on scroll */
+/* html,
+body {
+  overflow: hidden;
+  height: 100%;
+}
+
+main {
+  height: 100%;
+  overflow-y: auto;
+} */
+
+.lenis-stopped {
+  background-color: red;
+}
+
+/* html {
+  overflow: hidden;
+} */

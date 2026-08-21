@@ -7,9 +7,9 @@ import type fr from './fr'
  */
 const en: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — animated SVG avatar',
-    botAria: 'Animated tibsy avatar'
+    name: 'clipzy',
+    title: 'clipzy — animated vector avatar & clip video studio',
+    botAria: 'Animated clipzy avatar'
   },
 
   gallery: {
@@ -20,6 +20,8 @@ const en: typeof fr = {
     nav: 'Sections',
     customize: 'Customise',
     animations: 'Animations',
+    combos: 'Combos & Story',
+    reel: 'Reel Studio',
     lab3d: '3D Lab',
     settings: 'Settings'
   },
@@ -34,6 +36,10 @@ const en: typeof fr = {
     nose: 'Nose',
     cheeks: 'Cheeks',
     mouth: 'Mouth',
+    hats: 'Hats & Headwear',
+    glasses: 'Glasses & Shades',
+    props: 'Props & Items',
+    auras: 'Aura & Energy FX',
     color: 'Colour'
   },
 
@@ -115,17 +121,17 @@ const en: typeof fr = {
     title: 'Settings',
     language: 'Language',
     about: 'About',
-    credits: 'Made with ❤️ by {name}',
-    creditsAria: 'Jérémy on X, in a new tab',
-    github: 'View the project on GitHub',
-    githubAria: 'The project repository on GitHub, in a new tab'
+    credits: 'Crafted with ❤️ by {name}',
+    creditsAria: 'Jérémy on X, opens in a new tab',
+    github: 'View project on GitHub',
+    githubAria: 'The project repository on GitHub, opens in a new tab'
   },
 
   states: {
     idle: 'Idle',
     thinking: 'Thinking',
     wink: 'Wink',
-    wide: 'Wide eyes',
+    wide: 'Wide Eyes',
     alert: 'Alert',
     notify: 'Notification',
     exclaim: 'Exclamation',
@@ -144,6 +150,22 @@ const en: typeof fr = {
     nope: 'Nope',
     hello: 'Hello',
     sleepy: 'Sleepy',
+    power: 'Power Surge',
+    thuglife: 'Thug Life',
+    heart: 'Love Strike',
+    disco: 'Disco Dance',
+    glitch: 'Cyber Glitch',
+    vortex: 'Vortex Warp',
+    ninja: 'Ninja Stealth',
+    retro: '8-Bit Retro',
+    rocket: 'Rocket Blastoff',
+    freeze: 'Ice Freeze',
+    dizzy: 'Dizzy Stars',
+    royal: 'Royal Crown',
+    djbeat: 'DJ Bass Drop',
+    magic: 'Magic Sparkles',
+    action: 'Action Cut',
+    hyper: 'Hyper Caffeine',
     swirl: 'Swirl'
   },
 

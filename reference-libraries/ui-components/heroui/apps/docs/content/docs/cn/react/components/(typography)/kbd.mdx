@@ -1,0 +1,149 @@
+---
+title: Kbd 键盘按键
+description: 展示键盘快捷键与按键组合
+links:
+  source: kbd/kbd.tsx
+  styles: kbd.css
+  storybook: Components/Typography/Kbd
+  figma: true
+---
+
+## 用法
+
+```tsx
+import { Kbd } from "@heroui/react";
+```
+
+<ComponentPreview 
+  name="kbd-basic"
+/>
+
+## 组件结构
+
+```tsx
+import { Kbd } from "@heroui/react";
+
+export default () => (
+  <Kbd>
+    <Kbd.Abbr title="Command">⌘</Kbd.Abbr>
+    <Kbd.Content>K</Kbd.Content>
+  </Kbd>
+);
+```
+
+## 示例
+
+### 变体
+
+<ComponentPreview 
+  name="kbd-variants"
+/>
+
+### 导航按键
+
+<ComponentPreview 
+  name="kbd-navigation-keys"
+/>
+
+### 行内用法
+
+<ComponentPreview 
+  name="kbd-inline-usage"
+/>
+
+### 说明文字
+
+<ComponentPreview 
+  name="kbd-instructional-text"
+/>
+
+### 特殊按键
+
+<ComponentPreview 
+  name="kbd-special-keys"
+/>
+
+## 自定义样式
+
+### Tailwind CSS
+
+<ComponentPreview name="kbd-custom-styles" />
+
+### 全局 CSS
+
+可使用 `@layer components` 指令自定义 Kbd 组件类。
+[了解更多](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)。
+
+```css
+@layer components {
+  .kbd {
+    @apply bg-gray-100 dark:bg-gray-800 border-gray-300;
+  }
+
+  .kbd__abbr {
+    @apply font-bold;
+  }
+
+  .kbd__content {
+    @apply text-sm;
+  }
+}
+```
+
+## 样式参考
+
+HeroUI 遵循 [BEM](https://getbem.com/) 方法论，确保组件变体与状态可复用且易于自定义。
+
+### CSS 类
+
+Kbd 组件使用以下 CSS 类（[查看源码样式](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/kbd.css)）：
+
+#### 基础类 [!toc]
+
+- `.kbd` - 基础按键样式，含背景、边框与间距
+- `.kbd__abbr` - 修饰键的缩写元素
+- `.kbd__content` - 按键文本的内容包裹层
+
+## API 参考
+
+### Kbd
+
+| Prop        | 类型              | 默认值 | 描述            |
+| ----------- | ----------------- | ------- | ---------------------- |
+| `children`  | `React.ReactNode` | -       | 按键内容     |
+| `variant`   | `"default" | "light"` | `default`       | 按键视觉变体 |
+| `className` | `string`          | -       | 自定义 CSS 类     |
+
+### Kbd.Abbr
+
+| Prop        | 类型     | 默认值 | 描述                                                                                                                               |
+| ----------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | `string` | -       | 无障碍 title 属性（如 ⌘ 对应 "Command"）                                                                               |
+| `children`  | `React.ReactNode` | -       | 要显示的符号或文本（如 ⌘、⌥、⇧）                                                                                          |
+| `className` | `string` | -       | 自定义 CSS 类                                                                                                                       |
+
+### Kbd.Key
+
+| Prop        | 类型              | 默认值 | 描述                        |
+| ----------- | ----------------- | ------- | ---------------------------------- |
+| `children`  | `React.ReactNode` | -       | 按键文本内容            |
+| `className` | `string`          | -       | 自定义 CSS 类                 |
+
+### Kbd.Content Type
+
+`keyValue` prop 可用的按键值：
+
+| Modifier Keys | Special Keys | Navigation Keys | Function Keys |
+| ------------- | ------------ | --------------- | ------------- |
+| `command`     | `enter`      | `up`            | `fn`          |
+| `shift`       | `delete`     | `down`          |               |
+| `ctrl`        | `escape`     | `left`          |               |
+| `option`      | `tab`        | `right`         |               |
+| `alt`         | `space`      | `pageup`        |               |
+| `win`         | `capslock`   | `pagedown`      |               |
+|               | `help`       | `home`          |               |
+|               |              | `end`           |               |
+
+## 相关组件
+
+<RelatedComponents component="kbd" />

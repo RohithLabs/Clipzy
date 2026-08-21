@@ -1,0 +1,6 @@
+export {TooltipBasic as Basic} from "./basic";
+export {TooltipWithArrow as WithArrow} from "./with-arrow";
+export {TooltipPlacement as Placement} from "./placement";
+export {TooltipCustomTrigger as CustomTrigger} from "./custom-trigger";
+export {CustomStyles} from "./custom-styles";
+export {RenderFunction} from "./render-function";

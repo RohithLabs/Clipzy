@@ -1,0 +1,151 @@
+---
+title: Breadcrumbs 面包屑
+description: 导航面包屑，显示当前页面在层级结构中的位置
+links:
+  rac: Breadcrumbs
+  source: breadcrumbs/breadcrumbs.tsx
+  styles: breadcrumbs.css
+  storybook: Components/Navigation/Breadcrumbs
+---
+
+## 用法
+
+```tsx
+import { Breadcrumbs } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="breadcrumbs-basic"
+/>
+
+## 组件结构
+
+```tsx
+import { Breadcrumbs } from '@heroui/react';
+
+export default () => (
+  <Breadcrumbs>
+    <Breadcrumbs.Item href="#">Home</Breadcrumbs.Item>
+    <Breadcrumbs.Item href="#">Category</Breadcrumbs.Item>
+    <Breadcrumbs.Item>Current Page</Breadcrumbs.Item>
+  </Breadcrumbs>
+)
+```
+
+## 示例
+
+### 导航层级
+
+<ComponentPreview
+  name="breadcrumbs-level-2"
+/>
+
+<ComponentPreview
+  name="breadcrumbs-level-3"
+/>
+
+### 禁用状态
+
+<ComponentPreview
+  name="breadcrumbs-disabled"
+/>
+
+### 自定义分隔符
+
+<ComponentPreview
+  name="breadcrumbs-custom-separator"
+/>
+
+### 渲染函数
+
+<ComponentPreview
+  name="breadcrumbs-render-function"
+/>
+
+## 自定义样式
+
+### Tailwind CSS
+
+<ComponentPreview name="breadcrumbs-custom-styles" />
+
+### 全局 CSS
+
+可使用 `@layer components` 指令自定义 Breadcrumbs 组件类。
+[了解更多](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)。
+
+```css
+@layer components {
+  .breadcrumbs {
+    @apply gap-4 text-lg;
+  }
+
+  .breadcrumbs__link {
+    @apply font-semibold;
+  }
+
+  .breadcrumbs__separator {
+    @apply text-blue-500;
+  }
+}
+```
+
+## 样式参考
+
+HeroUI 遵循 [BEM](https://getbem.com/) 方法论，确保组件变体与状态可复用且易于自定义。
+
+### CSS 类
+
+Breadcrumbs 组件使用以下 CSS 类（[查看源码样式](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/breadcrumbs.css)）：
+
+#### 基础类 [!toc]
+- `.breadcrumbs` - 面包屑根容器
+- `.breadcrumbs__item` - 单个面包屑项包装器
+- `.breadcrumbs__link` - 面包屑链接元素
+- `.breadcrumbs__separator` - 项之间的分隔符图标
+
+#### 状态类 [!toc]
+- `.breadcrumbs__link[data-current="true"]` - 当前页指示（非链接）
+
+### 交互状态
+
+组件同时支持 CSS 伪类与 data 属性：
+
+- **Current**：链接上的 `[data-current="true"]`（表示当前页）
+- **Hover**：链接元素支持标准 hover 状态
+- **Disabled**：`isDisabled` 属性禁用所有链接
+
+## API 参考
+
+### Breadcrumbs
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `separator` | `ReactNode` | chevron-right icon | 面包屑项之间的自定义分隔符 |
+| `isDisabled` | `boolean` | `false` | 是否禁用所有面包屑链接 |
+| `className` | `string` | - | 附加 CSS 类 |
+| `children` | `ReactNode` | - | 面包屑项 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, undefined>` | - | 使用自定义 render 函数覆盖默认 DOM 元素 |
+
+### Breadcrumbs.Item
+
+| Prop | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `href` | `string` | - | 链接 URL（当前页可省略） |
+| `className` | `string` | - | 附加 CSS 类 |
+| `children` | `ReactNode \| RenderFunction` | - | 项内容或 render 函数 |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, BreadcrumbRenderProps>` | - | 使用自定义 render 函数覆盖默认 DOM 元素 |
+
+## 无障碍
+
+Breadcrumbs 使用 React Aria Components 的 Breadcrumbs 原语，提供：
+
+- 导航地标的正确 ARIA 属性
+- 通过 `aria-current="page"` 指示当前页
+- 键盘导航支持
+- 导航上下文的屏幕阅读器播报
+
+最后一项（无 `href`）自动成为当前页指示。
+
+## 相关组件
+
+<RelatedComponents component="breadcrumbs" />

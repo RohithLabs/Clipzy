@@ -10,6 +10,10 @@ import Settings from '@/components/Settings.vue'
 import SideRail, { type ViewId } from '@/components/SideRail.vue'
 import Timeline from '@/components/Timeline.vue'
 import Interactive3DShowcase from '@/components/Interactive3DShowcase.vue'
+import ComboPanel from '@/components/ComboPanel.vue'
+import ReelStudio from '@/components/ReelStudio.vue'
+import { sfx } from '@/audio/sfx'
+import type { HatId, GlassesId, PropId, AuraId } from '@/bot/accessories'
 import { nomDeCycle, t } from '@/i18n'
 import {
   copie,
@@ -52,6 +56,7 @@ import {
   makeBlock,
   parseCycles,
   totalDuration,
+  type Block,
   type Cycle
 } from '@/bot/cycles'
 import { DEFAULT_EXPRESSION, EXPRESSION_BY_ID } from '@/bot/expressions'
@@ -447,7 +452,7 @@ const nue = computed(() => intro.value && block.value < POSE_AT)
  * droite qu'on la fait glisser a sa place.
  */
 const gauche = computed(() => !nue.value && view.value === 'reglages')
-const droite = computed(() => !nue.value && view.value !== 'reglages' && view.value !== 'lab3d')
+const droite = computed(() => !nue.value && view.value !== 'reglages' && view.value !== 'lab3d' && view.value !== 'combos' && view.value !== 'reel')
 
 /* ------------------------------------------------------------------- skins */
 
@@ -483,6 +488,10 @@ const mouth = ref<MouthStyle>(
     ['none', 'smile', 'grin', 'frown', 'open', 'cat', 'straight'].includes(v)
   ) as MouthStyle
 )
+const hat = ref<HatId>('none')
+const glasses = ref<GlassesId>('none')
+const prop = ref<PropId>('none')
+const aura = ref<AuraId>('none')
 
 watch(shape, (v) => ecris('forme', v))
 watch(color, (v) => ecris('couleur', v))
@@ -493,14 +502,26 @@ watch(nose, (v) => ecris('nez', v))
 watch(cheeks, (v) => ecris('joues', v))
 watch(mouth, (v) => ecris('bouche', v))
 
+function onLoadCombo({ name, blocks }: { name: string; blocks: Block[] }) {
+  const newId = `combo-${Date.now()}`
+  const newCycle: Cycle = {
+    id: newId,
+    name,
+    blocks
+  }
+  cycles.value = [newCycle, ...cycles.value]
+  activeId.value = newId
+  block.value = 0
+  elapsed.value = 0
+  view.value = 'animations'
+  playing.value = true
+  sfx.playPowerCharge()
+}
+
 /**
- * Nom du produit, en capitales pour le grand mot du pied de page. PAS traduit —
- * c'est une marque. Les capitales sont un logotype propre a ce pied de page : en
- * prose le nom s'ecrit « tibsy », tout en minuscules, et c'est cette forme que
- * portent `app.name` et `app.title` dans les trois locales. La constante est donc
- * ecrite ici plutot que tiree de `t('app.name')`, qui n'a pas la meme casse.
+ * Nom du produit, en capitales pour le grand mot du pied de page.
  */
-const NOM = 'TIBSY'
+const NOM = 'CLIPZY'
 
 /* ----------------------------------------------------------------- humeurs */
 
@@ -871,9 +892,32 @@ watch(
          sixieme de la largeur pour rien. Le padding BAS n'est pas touche ici : la
          vue Animations le remplace par la reserve de la barre de montage, et une
          variante `max-lg:pb-*` reprendrait la main dessus. -->
+    <!-- Section Combos Hub -->
+    <div
+      v-if="view === 'combos' && !preview"
+      class="combos-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <ComboPanel @load-combo="onLoadCombo" />
+    </div>
+
+    <!-- Section Reel Studio -->
+    <div
+      v-else-if="view === 'reel' && !preview"
+      class="reel-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
+    >
+      <ReelStudio
+        :avatar-color="color"
+        :avatar-shape="typeof shape === 'string' ? shape : 'cercle'"
+        :avatar-hat="hat"
+        :avatar-glasses="glasses"
+        :avatar-prop="prop"
+        :avatar-aura="aura"
+      />
+    </div>
+
     <!-- Section dédiée au développement et test des éléments 3D interactifs -->
     <div
-      v-if="view === 'lab3d' && !preview"
+      v-else-if="view === 'lab3d' && !preview"
       class="lab3d-scroll-container w-full h-[100dvh] max-h-[100dvh] overflow-y-auto overflow-x-hidden p-4 lg:p-8 max-lg:pt-20 lg:pl-16 pb-24"
     >
       <Interactive3DShowcase />
@@ -899,20 +943,6 @@ watch(
         change, sinon il n'y aurait rien a faire glisser — c'est la largeur de sa
         colonne qui l'escamote, pas un `v-if`.
       -->
-      <!-- Centre verticalement, contrairement au panneau de droite : celui-la est
-           une longue grille de vignettes qui part du haut, celui-ci tient en
-           quelques lignes et se lirait comme oublie en haut d'un grand vide. Puis
-           remonte d'un cran : centre au pixel, il tombe plus bas que le regard,
-           qui se porte au tiers superieur.
-
-           Il se centre sur la BANDE DE L'AVATAR (la meme hauteur que `main`), et
-           non sur la colonne : cette vue n'a pas de barre de montage, donc la
-           colonne va jusqu'en bas de la fenetre et un centrage dessus ferait
-           descendre le panneau d'une centaine de pixels selon l'onglet. -->
-      <!-- `lg:pl-14` : le rail flotte au-dessus de la scene, qui ne lui reserve
-           plus de place — sinon il decalerait l'avatar vers la droite. Ce panneau
-           est le seul contenu qui arrive assez a gauche pour passer dessous, donc
-           c'est LUI qui s'ecarte, et pas la scene entiere. -->
       <aside
         v-if="!preview"
         class="panneau scene__gauche w-full lg:flex lg:h-[calc(100dvh_-_3rem_-_var(--timeline))] lg:w-80 lg:shrink-0 lg:flex-col lg:justify-center lg:self-start lg:-translate-y-12 lg:pl-14"
@@ -921,10 +951,7 @@ watch(
         <Settings />
       </aside>
 
-      <!-- scene. Sa hauteur ne doit pas dependre du panneau de droite : etiree
-           (items-stretch), elle suivait le panneau de personnalisation, plus
-           haut que la grille d'animations, et l'avatar centre changeait de
-           place d'un onglet a l'autre. -->
+      <!-- scene -->
       <main
         class="scene__avatar relative flex flex-1 items-center justify-center max-lg:order-1 max-lg:flex-col max-lg:gap-4 lg:self-start"
         :class="
@@ -933,9 +960,7 @@ watch(
             : 'lg:min-h-[calc(100dvh_-_3rem_-_var(--timeline))]'
         "
       >
-        <!-- l'avatar se met a la hauteur disponible : sur une fenetre basse, la
-             barre de montage lui prend assez de place pour qu'un carre de 460
-             deborde et fasse defiler la page -->
+        <!-- l'avatar se met a la hauteur disponible -->
         <div
           class="avatar flex aspect-square w-full items-center justify-center"
           :class="[
@@ -968,30 +993,6 @@ watch(
           />
         </div>
 
-        <!--
-          La barre d'export ne decale PAS l'avatar : elle est hors du flux, et
-          `--timeline` est deja soustrait de la hauteur de cette colonne dans les
-          DEUX vues (sinon l'avatar centre changerait de place en passant a la
-          personnalisation), donc la bande sous la boule est deja libre ici. Rien
-          de neuf a reserver, aucune variable a ajouter.
-
-          En `fixed` comme la barre de montage, mais calee sur la COLONNE de
-          l'avatar (`left`/`right`) et non sur la fenetre entiere : son contenu se
-          centre sous la boule, pas au milieu de l'ecran.
-
-          Le calage fin est dans `styles.css` (`.barre-export`), qui a besoin du
-          `min()` de la boite de l'avatar. En dessous de 64rem la regle ne
-          s'applique pas : la scene s'empile, rien n'est reserve, et la barre
-          repasse dans le flux — sinon elle recouvrirait le personnalisateur.
-        -->
-        <!--
-          Montee pendant l'arrivee mais MASQUEE (`nue`), et pas retiree : c'est
-          l'etat de depart de sa transition, et sans lui a l'ecran il n'y aurait
-          rien a interpoler quand elle se revele. Meme montage que `.panneau`.
-
-          `inert` avec le masque : un element a `opacity: 0` reste cliquable et
-          atteignable au clavier.
-        -->
         <div
           v-if="view === 'personnaliser' && !preview"
           class="barre-export"
@@ -1001,14 +1002,6 @@ watch(
           <ExportBar :etat="etatExport" @exporter="exporte" />
         </div>
 
-        <!--
-          Les deux boites sont HORS de la barre d'export, alors que c'est elle qui
-          ouvre la seconde : la barre porte `inert` quand elle est masquee, et
-          `inert` s'applique a toute la descendance — y compris a un element passe
-          dans la couche superieure, que rien ne doit pouvoir neutraliser.
-
-          Export du MONTAGE, depuis la barre de montage : format et progression.
-        -->
         <CycleDialog
           v-if="view === 'animations' && !preview"
           v-model:open="dialogueCycle"
@@ -1020,8 +1013,6 @@ watch(
           @annuler="annuleCycle"
         />
 
-        <!-- Export de l'AVATAR : le GIF est le seul format a demander son fond,
-             voir `exporte`. -->
         <GifDialog
           v-if="view === 'personnaliser' && !preview"
           v-model:open="dialogueGif"
@@ -1030,9 +1021,6 @@ watch(
         />
       </main>
 
-      <!-- largeur fixe, identique dans les deux vues : sinon la scene se decale
-           au changement d'onglet. w-80 est la contrainte du personnalisateur
-           (grille de 4 vignettes), le panneau d'animations s'y adapte. -->
       <aside
         v-if="!preview"
         class="panneau scene__droite w-full lg:w-80 lg:shrink-0"
@@ -1065,6 +1053,10 @@ watch(
             v-model:nose="nose"
             v-model:cheeks="cheeks"
             v-model:mouth="mouth"
+            v-model:hat="hat"
+            v-model:glasses="glasses"
+            v-model:prop="prop"
+            v-model:aura="aura"
           />
         </template>
       </aside>

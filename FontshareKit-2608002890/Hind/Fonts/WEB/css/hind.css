@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Hind
+* Designed by: Manushi Parikh
+* URL: https://www.fontshare.com/fonts/hind
+* © 2026 Indian Type Foundry
+*
+* Hind Regular 
+
+*
+*/
+@font-face {
+  font-family: 'Hind-Regular';
+  src: url('../fonts/Hind-Regular.woff2') format('woff2'),
+       url('../fonts/Hind-Regular.woff') format('woff'),
+       url('../fonts/Hind-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+

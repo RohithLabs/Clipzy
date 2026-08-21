@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const ja: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — アニメーションSVGアバター',
-    botAria: 'アニメーション化されたtibsyアバター'
+    name: 'clipzy',
+    title: 'clipzy — ベクターアニメアバター＆動画スタジオ',
+    botAria: 'アニメーション化されたclipzyアバター'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const ja: typeof fr = {
     nav: 'セクション',
     customize: 'カスタマイズ',
     animations: 'アニメーション',
+    combos: 'コンボ＆ストーリー',
+    reel: 'リールスタジオ',
     lab3d: '3Dラボ',
     settings: '設定'
   },
@@ -29,6 +31,10 @@ const ja: typeof fr = {
     nose: '鼻',
     cheeks: 'ほっぺ',
     mouth: '口',
+    hats: '帽子＆ヘッドウェア',
+    glasses: 'メガネ＆サングラス',
+    props: '持ち物＆アイテム',
+    auras: 'オーラ＆エフェクトFX',
     color: 'カラー'
   },
 
@@ -63,17 +69,17 @@ const ja: typeof fr = {
   },
 
   preview: {
-    exit: 'プレビューを終了',
+    exit: 'プレビュー終了',
     key: 'Esc'
   },
 
   timeline: {
     play: '再生開始',
     pause: '再生停止',
-    addAnimation: 'アニメーションを追加',
+    addAnimation: 'アニメーション追加',
     preview: 'プレビュー',
-    export: 'モンタージュを書き出し',
-    zoom: 'トラック拡大',
+    export: 'モンタージュ書き出し',
+    zoom: 'トラックズーム',
     blockAria: '{state}、{duration}',
     blockDurationAria: '{state}の長さ、{duration}',
     blockRemoveAria: '{state}を削除'
@@ -81,14 +87,14 @@ const ja: typeof fr = {
 
   dialog: {
     cancel: 'キャンセル',
-    nameCreateTitle: '新しいサイクル',
+    nameCreateTitle: '新規サイクル',
     nameRenameTitle: 'サイクル名を変更',
     nameField: 'サイクル名',
     nameCreate: '作成',
     nameRename: '変更',
-    removeTitle: '"{name}" を削除しますか？',
+    removeTitle: '「{name}」を削除しますか？',
     removeDetail:
-      'このシーケンスとアニメーションは失われます。 | このシーケンスと {n} 個のアニメーションは失われます。',
+      'このシーケンスはアニメーションと共に失われます。 | このシーケンスは {n} 個のアニメーションと共に失われます。',
     removeConfirm: '削除'
   },
 
@@ -102,7 +108,7 @@ const ja: typeof fr = {
 
   units: {
     seconds: '{n} 秒',
-    secondsShort: '{n}秒'
+    secondsShort: '{n}s'
   },
 
   settings: {
@@ -138,6 +144,22 @@ const ja: typeof fr = {
     nope: '首を振る',
     hello: 'こんにちは',
     sleepy: '眠い',
+    power: 'パワーサージ',
+    thuglife: 'サグライフ',
+    heart: 'ハートラブ',
+    disco: 'ディスコダンス',
+    glitch: 'サイバーグリッチ',
+    vortex: 'ワームホール',
+    ninja: '影の忍者',
+    retro: '8ビットレトロ',
+    rocket: 'ロケット発射',
+    freeze: 'フリーズ氷結',
+    dizzy: 'めまい星',
+    royal: 'ロイヤルクラウン',
+    djbeat: 'DJベースドロップ',
+    magic: '魔法キラキラ',
+    action: 'シネマアクション',
+    hyper: 'ハイパーカフェイン',
     swirl: 'スワール'
   },
 

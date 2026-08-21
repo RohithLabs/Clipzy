@@ -283,3 +283,181 @@ export const NOTIF_POP = 1.14
  * La marge est constante (0.054 R) et suit l'echelle du corps.
  */
 export const NOTIF_MARGIN = 0.054
+
+/* --------------------------------------------------- Custom Deco SVGs */
+
+export const SVG_HEART = 'M0,-0.3 C-0.3,-0.6 -0.6,-0.3 -0.6,0.05 C-0.6,0.45 0,0.8 0,0.9 C0,0.8 0.6,0.45 0.6,0.05 C0.6,-0.3 0.3,-0.6 0,-0.3 Z'
+export const SVG_STAR = 'M0,-0.6 L0.18,-0.18 L0.6,-0.18 L0.26,0.1 L0.4,0.55 L0,0.28 L-0.4,0.55 L-0.26,0.1 L-0.6,-0.18 L-0.18,-0.18 Z'
+export const SVG_CROWN = 'M-0.6,0.4 L-0.6,-0.3 L-0.2,0 L0,-0.5 L0.2,0 L0.6,-0.3 L0.6,0.4 Z'
+export const SVG_SNOWFLAKE = 'M0,-0.5 L0,0.5 M-0.5,0 L0.5,0 M-0.35,-0.35 L0.35,0.35 M-0.35,0.35 L0.35,-0.35'
+export const SVG_NOTE = 'M-0.2,0.3 A0.2,0.15 0 1,0 0,0.45 L0,-0.4 L0.4,-0.25 L0.4,-0.1 L0,-0.25'
+
+/* --------------------------------------------------- Power Electric Arcs */
+
+export const POWER_ARCS: ArcSeed[] = Array.from({ length: 5 }, (_, i) => ({
+  a: 1.25 + i * 0.08,
+  k: 0.12 + (i % 2) * 0.15,
+  tilt: (i * Math.PI) / 2.5,
+  speed: 4.5,
+  phase: i * 0.8,
+  sweep: 0.45,
+  hue: 45 + i * 15,
+  hueSpan: 50,
+  width: 0.06,
+  cx: 0,
+  cy: 0
+}))
+
+/* --------------------------------------------------- Procedural Generators */
+
+export function heartParticles(t: number, scale: number): DotRender[] {
+  const count = 6
+  const out: DotRender[] = []
+  for (let i = 0; i < count; i++) {
+    const pPhase = (t * 1.2 + i / count) % 1
+    const y = (1 - pPhase * 2.2) * 0.8
+    const x = Math.sin(pPhase * TAU * 1.5 + i) * 0.45 * (0.4 + 0.6 * pPhase)
+    const opacity = clamp(Math.sin(pPhase * Math.PI) * 1.5)
+    out.push({
+      x: x * scale,
+      y: y * scale,
+      r: (0.12 + 0.04 * Math.sin(i * 2)) * scale,
+      d: SVG_HEART,
+      color: i % 2 === 0 ? '#ff2a6d' : '#ff758c',
+      opacity
+    })
+  }
+  return out
+}
+
+export function dizzyStars(t: number, scale: number): DotRender[] {
+  const count = 4
+  const out: DotRender[] = []
+  const radius = 0.85
+  for (let i = 0; i < count; i++) {
+    const angle = t * TAU * 1.2 + (i * TAU) / count
+    const x = Math.cos(angle) * radius
+    const y = -0.9 + Math.sin(angle) * 0.22
+    out.push({
+      x: x * scale,
+      y: y * scale,
+      r: 0.14 * scale,
+      d: SVG_STAR,
+      rot: t * 180 + i * 90,
+      color: '#facc15',
+      opacity: 0.9
+    })
+  }
+  return out
+}
+
+export function discoSparkles(t: number, scale: number): DotRender[] {
+  const count = 8
+  const out: DotRender[] = []
+  for (let i = 0; i < count; i++) {
+    const a = (i * TAU) / count + t * 0.8
+    const dist = 1.15 + 0.25 * Math.sin(t * 5 + i * 2)
+    const hue = (i * 45 + t * 180) % 360
+    out.push({
+      x: Math.cos(a) * dist * scale,
+      y: Math.sin(a) * dist * scale,
+      r: 0.1 * scale,
+      d: i % 2 === 0 ? SVG_STAR : SVG_NOTE,
+      rot: t * 90 + i * 45,
+      color: wheel(hue, 0.85, 0.6),
+      opacity: 0.8 + 0.2 * Math.sin(t * 8 + i)
+    })
+  }
+  return out
+}
+
+export function glitchPixels(t: number, scale: number): DotRender[] {
+  const count = 10
+  const out: DotRender[] = []
+  const seed = Math.floor(t * 15)
+  const rng = createRng(seed)
+  for (let i = 0; i < count; i++) {
+    const x = (rng() * 2 - 1) * 1.2
+    const y = (rng() * 2 - 1) * 1.2
+    out.push({
+      x: x * scale,
+      y: y * scale,
+      r: (0.04 + rng() * 0.08) * scale,
+      color: rng() > 0.5 ? '#00f0ff' : '#ff0055',
+      opacity: 0.6 + rng() * 0.4
+    })
+  }
+  return out
+}
+
+export function rocketPlume(t: number, scale: number): DotRender[] {
+  const count = 7
+  const out: DotRender[] = []
+  for (let i = 0; i < count; i++) {
+    const phase = (t * 4 + i / count) % 1
+    const y = 0.85 + phase * 0.9
+    const x = (Math.sin(i * 3 + t * 10) * 0.18) * (1 - phase * 0.4)
+    out.push({
+      x: x * scale,
+      y: y * scale,
+      r: (0.16 * (1 - phase * 0.7)) * scale,
+      color: phase < 0.3 ? '#ffffff' : phase < 0.6 ? '#fbbf24' : '#ef4444',
+      opacity: clamp((1 - phase) * 1.4)
+    })
+  }
+  return out
+}
+
+export function frostShards(t: number, scale: number): DotRender[] {
+  const count = 6
+  const out: DotRender[] = []
+  for (let i = 0; i < count; i++) {
+    const a = (i * TAU) / count
+    const d = 1.05 + 0.1 * Math.sin(t * 2 + i)
+    out.push({
+      x: Math.cos(a) * d * scale,
+      y: Math.sin(a) * d * scale,
+      r: 0.12 * scale,
+      d: SVG_SNOWFLAKE,
+      rot: i * 30,
+      color: '#a5f3fc',
+      opacity: 0.85
+    })
+  }
+  return out
+}
+
+export function djEqualizerBars(t: number, scale: number): DotRender[] {
+  const bars = 8
+  const out: DotRender[] = []
+  for (let i = 0; i < bars; i++) {
+    const x = ((i - (bars - 1) / 2) / (bars / 2)) * 0.8
+    const h = 0.2 + 0.4 * Math.abs(Math.sin(t * 6 + i * 1.2))
+    out.push({
+      x: x * scale,
+      y: (1.15 - h * 0.3) * scale,
+      r: (0.04 + h * 0.04) * scale,
+      color: wheel(i * 35 + t * 60, 0.9, 0.55),
+      opacity: 0.9
+    })
+  }
+  return out
+}
+
+export function smokePoof(t: number, scale: number): DotRender[] {
+  const count = 8
+  const out: DotRender[] = []
+  const p = clamp(t / 0.8)
+  for (let i = 0; i < count; i++) {
+    const a = (i * TAU) / count
+    const dist = 0.3 + p * 0.9
+    out.push({
+      x: Math.cos(a) * dist * scale,
+      y: Math.sin(a) * dist * scale,
+      r: (0.15 + p * 0.2) * scale,
+      color: '#94a3b8',
+      opacity: (1 - p) * 0.7
+    })
+  }
+  return out
+}

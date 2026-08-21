@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const es: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — avatar SVG animado',
-    botAria: 'Avatar animado tibsy'
+    name: 'clipzy',
+    title: 'clipzy — avatar vectorial y estudio de video animado',
+    botAria: 'Avatar animado clipzy'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const es: typeof fr = {
     nav: 'Secciones',
     customize: 'Personalizar',
     animations: 'Animaciones',
+    combos: 'Combos y Secuencias',
+    reel: 'Estudio Reel',
     lab3d: 'Laboratorio 3D',
     settings: 'Ajustes'
   },
@@ -29,6 +31,10 @@ const es: typeof fr = {
     nose: 'Nariz',
     cheeks: 'Mejillas',
     mouth: 'Boca',
+    hats: 'Gorros y Tocados',
+    glasses: 'Gafas y Lentes',
+    props: 'Accesorios y Objetos',
+    auras: 'Aura y Efectos FX',
     color: 'Color'
   },
 
@@ -64,13 +70,13 @@ const es: typeof fr = {
   },
 
   preview: {
-    exit: 'Salir de la vista previa',
+    exit: 'Salir de vista previa',
     key: 'Esc'
   },
 
   timeline: {
-    play: 'Reproducir',
-    pause: 'Pausar',
+    play: 'Iniciar reproducción',
+    pause: 'Detener reproducción',
     addAnimation: 'Añadir animación',
     preview: 'Vista previa',
     export: 'Exportar montaje',
@@ -87,7 +93,7 @@ const es: typeof fr = {
     nameField: 'Nombre del ciclo',
     nameCreate: 'Crear',
     nameRename: 'Renombrar',
-    removeTitle: '¿Eliminar "{name}"?',
+    removeTitle: '¿Eliminar «{name}»?',
     removeDetail:
       'Esta secuencia se perderá junto con su animación. | Esta secuencia se perderá junto con sus {n} animaciones.',
     removeConfirm: 'Eliminar'
@@ -110,10 +116,10 @@ const es: typeof fr = {
     title: 'Ajustes',
     language: 'Idioma',
     about: 'Acerca de',
-    credits: 'Hecho con ❤️ por {name}',
-    creditsAria: 'Creadores del proyecto',
+    credits: 'Creado con ❤️ por {name}',
+    creditsAria: 'Jérémy en X, se abre en pestaña nueva',
     github: 'Ver proyecto en GitHub',
-    githubAria: 'Repositorio del proyecto en GitHub'
+    githubAria: 'Repositorio del proyecto en GitHub, se abre en pestaña nueva'
   },
 
   states: {
@@ -139,6 +145,22 @@ const es: typeof fr = {
     nope: 'Negación',
     hello: 'Hola',
     sleepy: 'Somnoliento',
+    power: 'Superpoder',
+    thuglife: 'Thug Life',
+    heart: 'Amor y Corazón',
+    disco: 'Baile Disco',
+    glitch: 'Glitch Cyber',
+    vortex: 'Vórtice Espacial',
+    ninja: 'Ninja Sigiloso',
+    retro: 'Retro 8-Bit',
+    rocket: 'Despegue Cohete',
+    freeze: 'Hielo Congelado',
+    dizzy: 'Estrellas Mareo',
+    royal: 'Corona Real',
+    djbeat: 'Ritmo DJ',
+    magic: 'Magia Destellos',
+    action: 'Corte Acción',
+    hyper: 'Hiper Café',
     swirl: 'Giro'
   },
 

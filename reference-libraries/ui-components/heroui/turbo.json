@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "VERCEL_ENV",
+    "STORYBOOK_READY_ONLY",
+    "LOOPS_API_ENDPOINT",
+    "LOOPS_API_KEY",
+    "FEATUREBASE_API_ENDPOINT",
+    "FEATUREBASE_API_KEY"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", ".source/**", "dist/**", "storybook-static/**"]
+    },
+    "start": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint": {
+      "outputs": []
+    },
+    "format": {
+      "dependsOn": [],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": [],
+      "outputs": []
+    },
+    "test:coverage": {
+      "dependsOn": [],
+      "outputs": ["coverage/**"]
+    },
+    "typecheck": {
+      "dependsOn": [],
+      "outputs": []
+    }
+  }
+}

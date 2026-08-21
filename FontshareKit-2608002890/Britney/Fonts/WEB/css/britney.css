@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Britney
+* Designed by: Diana Ovezea & Sabina Chipară
+* URL: https://www.fontshare.com/fonts/britney
+* © 2026 Indian Type Foundry
+*
+* Britney Regular 
+
+*
+*/
+@font-face {
+  font-family: 'Britney-Regular';
+  src: url('../fonts/Britney-Regular.woff2') format('woff2'),
+       url('../fonts/Britney-Regular.woff') format('woff'),
+       url('../fonts/Britney-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+

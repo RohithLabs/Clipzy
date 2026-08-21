@@ -13,15 +13,9 @@
  */
 export default {
   app: {
-    /**
-     * Nom du produit. En minuscules dans les trois langues, ce n'est pas une
-     * coquille : les capitales de `NOM` (App.vue) sont un logotype, pas le nom.
-     * Un nom propre ne se traduit pas non plus. `title` sert de `document.title`.
-     * Voir aussi le <title> de index.html, qui est statique.
-     */
-    name: 'tibsy',
-    title: 'tibsy — avatar SVG animé',
-    botAria: 'Avatar tibsy animé'
+    name: 'clipzy',
+    title: 'clipzy — avatar vectoriel & studio vidéo animé',
+    botAria: 'Avatar clipzy animé'
   },
 
   gallery: {
@@ -32,16 +26,13 @@ export default {
     nav: 'Sections',
     customize: 'Personnaliser',
     animations: 'Animations',
+    combos: 'Combos & Story',
+    reel: 'Studio Reel',
     lab3d: 'Lab 3D',
     settings: 'Réglages'
   },
 
   panel: {
-    /**
-     * Au SINGULIER, comme les trois autres : un titre de grille nomme ce qu'un
-     * clic pose, pas le nombre de vignettes proposees. Le pluriel reste au rail,
-     * qui nomme la vue et non le choix (`rail.animations`).
-     */
     animations: 'Animation',
     shape: 'Forme',
     expression: 'Expression',
@@ -51,6 +42,10 @@ export default {
     nose: 'Nez',
     cheeks: 'Joues',
     mouth: 'Bouche',
+    hats: 'Chapeaux & Coiffes',
+    glasses: 'Lunettes & Visière',
+    props: 'Accessoires & Objets',
+    auras: 'Aura & Énergie FX',
     color: 'Couleur'
   },
 
@@ -169,6 +164,22 @@ export default {
     nope: 'Non',
     hello: 'Coucou',
     sleepy: 'Endormi',
+    power: 'Super-puissance',
+    thuglife: 'Thug Life',
+    heart: 'Cœur battant',
+    disco: 'Danse Disco',
+    glitch: 'Glitch Cyber',
+    vortex: 'Vortex Spatial',
+    ninja: 'Ninja Furtif',
+    retro: 'Rétro 8-Bit',
+    rocket: 'Fusée Décollage',
+    freeze: 'Gel Glaçon',
+    dizzy: 'Étoiles Étourdi',
+    royal: 'Couronne Royale',
+    djbeat: 'DJ Bass Drop',
+    magic: 'Magie Féerique',
+    action: 'Action Cinéma',
+    hyper: 'Hyper Caféine',
     swirl: 'Tourbillon'
   },
 

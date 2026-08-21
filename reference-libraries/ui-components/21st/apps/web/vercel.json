@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/subscription/stripe-cron",
+      "schedule": "0 0 1 * *"
+    },
+    {
+      "path": "/api/cron/gen-usage-embeddings",
+      "schedule": "0 * * * *"
+    }
+  ]
+}

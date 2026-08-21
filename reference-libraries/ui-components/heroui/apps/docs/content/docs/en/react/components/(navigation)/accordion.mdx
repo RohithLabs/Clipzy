@@ -1,0 +1,226 @@
+---
+title: Accordion
+description: A collapsible content panel for organizing information in a compact space
+links:
+  rac: Disclosure
+  source: accordion/accordion.tsx
+  styles: accordion.css
+  storybook: Components/Navigation/Accordion
+  figma: true
+---
+
+## Usage
+
+```tsx
+import { Accordion } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="accordion-basic"
+  minHeight="400px"
+/>
+
+## Anatomy
+
+```tsx
+import { Accordion } from '@heroui/react';
+
+export default () => (
+  <Accordion>
+    <Accordion.Item>
+      <Accordion.Heading>
+        <Accordion.Trigger>
+          <Accordion.Indicator />
+        </Accordion.Trigger>
+      </Accordion.Heading>
+      <Accordion.Panel>
+        <Accordion.Body/>
+      </Accordion.Panel>
+    </Accordion.Item>
+  </Accordion>
+)
+```
+
+## Examples
+
+### Surface
+
+<ComponentPreview
+  name="accordion-surface"
+  minHeight="400px"
+/>
+
+### Without Separator
+
+<ComponentPreview
+  name="accordion-without-separator"
+  minHeight="400px"
+/>
+
+### Multiple Expanded
+
+<ComponentPreview
+  name="accordion-multiple"
+  minHeight="524px"
+/>
+
+### Disabled State
+
+<ComponentPreview
+  name="accordion-disabled"
+  minHeight="524px"
+/>
+
+### Controlled
+
+<ComponentPreview
+  name="accordion-controlled"
+  minHeight="400px"
+/>
+
+### Custom Indicator
+
+<ComponentPreview
+  name="accordion-custom-indicator"
+  minHeight="320px"
+/>
+
+### Render Function
+
+<ComponentPreview
+  name="accordion-render-function"
+  minHeight="400px"
+/>
+
+### FAQ Layout
+
+<ComponentPreview
+  name="accordion-faq"
+  minHeight="720px"
+/>
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="accordion-custom-styles" />
+
+### Global CSS
+
+To customize the Accordion component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .accordion {
+    @apply rounded-xl bg-gray-50;
+  }
+
+  .accordion__trigger {
+    @apply font-semibold text-lg;
+  }
+
+  .accordion--outline {
+    @apply shadow-lg border-2;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Accordion component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/accordion.css)):
+
+#### Base Classes [!toc]
+- `.accordion` - Base accordion container
+- `.accordion__body` - Content body container
+- `.accordion__heading` - Heading wrapper
+- `.accordion__indicator` - Expand/collapse indicator icon
+- `.accordion__item` - Individual accordion item
+- `.accordion__panel` - Collapsible panel container
+- `.accordion__trigger` - Clickable trigger button
+
+#### Variant Classes [!toc]
+- `.accordion--outline` - Outline variant with border and background
+
+#### State Classes [!toc]
+- `.accordion__trigger[aria-expanded="true"]` - Expanded state
+- `.accordion__panel[aria-hidden="false"]` - Panel visible state
+
+### Interactive States
+
+The component supports both CSS pseudo-classes and data attributes for flexibility:
+
+- **Hover**: `:hover` or `[data-hovered="true"]` on trigger
+- **Focus**: `:focus-visible` or `[data-focus-visible="true"]` on trigger
+- **Disabled**: `:disabled` or `[aria-disabled="true"]` on trigger
+- **Expanded**: `[aria-expanded="true"]` on trigger
+
+## API Reference
+
+### Accordion
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `allowsMultipleExpanded` | `boolean` | `false` | Whether multiple items can be expanded at once |
+| `defaultExpandedKeys` | `Iterable<Key>` | - | The initial expanded keys |
+| `expandedKeys` | `Iterable<Key>` | - | The controlled expanded keys |
+| `onExpandedChange` | `(keys: Set<Key>) => void` | - | Handler called when expanded keys change |
+| `isDisabled` | `boolean` | `false` | Whether the entire accordion is disabled |
+| `variant` | `"default" \| "surface"` | `"default"` | The visual variant of the accordion |
+| `hideSeparator` | `boolean` | `false` | Hide separator lines between accordion items |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The accordion items |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Accordion.Item
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `Key` | - | Unique identifier for the item |
+| `isDisabled` | `boolean` | `false` | Whether this item is disabled |
+| `defaultExpanded` | `boolean` | `false` | Whether item is initially expanded |
+| `isExpanded` | `boolean` | - | Controlled expanded state |
+| `onExpandedChange` | `(isExpanded: boolean) => void` | - | Handler for expanded state changes |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The item content |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionItemRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Accordion.Trigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode \| RenderFunction` | - | Trigger content or render function |
+| `onPress` | `() => void` | - | Additional press handler |
+| `isDisabled` | `boolean` | - | Whether trigger is disabled |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, TriggerRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Accordion.Panel
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Panel content |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, AccordionPanelRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Accordion.Indicator
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Custom indicator icon |
+
+### Accordion.Body
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | Body content |
+
+## Related Components
+
+<RelatedComponents component="accordion" />

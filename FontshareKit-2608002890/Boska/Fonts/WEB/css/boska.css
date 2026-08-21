@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Boska
+* Designed by: Barbara Bigosinska
+* URL: https://www.fontshare.com/fonts/boska
+* © 2026 Indian Type Foundry
+*
+* Boska Light 
+
+*
+*/
+@font-face {
+  font-family: 'Boska-Light';
+  src: url('../fonts/Boska-Light.woff2') format('woff2'),
+       url('../fonts/Boska-Light.woff') format('woff'),
+       url('../fonts/Boska-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+

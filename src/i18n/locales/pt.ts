@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const pt: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — avatar SVG animado',
-    botAria: 'Avatar tibsy animado'
+    name: 'clipzy',
+    title: 'clipzy — avatar vetorial e estúdio de vídeo animado',
+    botAria: 'Avatar clipzy animado'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const pt: typeof fr = {
     nav: 'Seções',
     customize: 'Personalizar',
     animations: 'Animações',
+    combos: 'Combos & História',
+    reel: 'Estúdio Reel',
     lab3d: 'Laboratório 3D',
     settings: 'Configurações'
   },
@@ -29,6 +31,10 @@ const pt: typeof fr = {
     nose: 'Nariz',
     cheeks: 'Bochechas',
     mouth: 'Boca',
+    hats: 'Chapéus e Acessórios de Cabeça',
+    glasses: 'Óculos e Viseiras',
+    props: 'Objetos e Acessórios',
+    auras: 'Aura e Energia FX',
     color: 'Cor'
   },
 
@@ -63,7 +69,7 @@ const pt: typeof fr = {
   },
 
   preview: {
-    exit: 'Sair da pré-visualização',
+    exit: 'Sair da prévia',
     key: 'Esc'
   },
 
@@ -71,7 +77,7 @@ const pt: typeof fr = {
     play: 'Iniciar reprodução',
     pause: 'Parar reprodução',
     addAnimation: 'Adicionar animação',
-    preview: 'Pré-visualização',
+    preview: 'Prévia',
     export: 'Exportar montagem',
     zoom: 'Zoom da trilha',
     blockAria: '{state}, {duration}',
@@ -88,7 +94,7 @@ const pt: typeof fr = {
     nameRename: 'Renomear',
     removeTitle: 'Excluir "{name}"?',
     removeDetail:
-      'Esta sequência será perdida com sua animação. | Esta sequência será perdida com suas {n} animações.',
+      'Esta sequência será perdida, junto com sua animação. | Esta sequência será perdida, junto com suas {n} animações.',
     removeConfirm: 'Excluir'
   },
 
@@ -109,10 +115,10 @@ const pt: typeof fr = {
     title: 'Configurações',
     language: 'Idioma',
     about: 'Sobre',
-    credits: 'Feito com ❤️ por {name}',
-    creditsAria: 'Criadores do projeto',
+    credits: 'Criado com ❤️ por {name}',
+    creditsAria: 'Jérémy no X, abre em nova aba',
     github: 'Ver projeto no GitHub',
-    githubAria: 'Repositório do projeto no GitHub'
+    githubAria: 'Repositório do projeto no GitHub, abre em nova aba'
   },
 
   states: {
@@ -123,10 +129,10 @@ const pt: typeof fr = {
     alert: 'Alerta',
     notify: 'Notificação',
     exclaim: 'Exclamação',
-    sleep: 'Dormir',
+    sleep: 'Dormindo',
     egg: 'Ovo',
     hexagon: 'Hexágono',
-    play: 'Brincar',
+    play: 'Reproduzir',
     orbit: 'Órbita',
     burst: 'Explosão',
     comet: 'Cometa',
@@ -138,6 +144,22 @@ const pt: typeof fr = {
     nope: 'Negar',
     hello: 'Olá',
     sleepy: 'Sonolento',
+    power: 'Poder Máximo',
+    thuglife: 'Thug Life',
+    heart: 'Coração Apaixonado',
+    disco: 'Dança Disco',
+    glitch: 'Glitch Cyber',
+    vortex: 'Vórtice Espacial',
+    ninja: 'Ninja Furtivo',
+    retro: 'Retrô 8-Bit',
+    rocket: 'Decolagem Foguete',
+    freeze: 'Gelo Congelado',
+    dizzy: 'Tontura e Estrelas',
+    royal: 'Coroa Real',
+    djbeat: 'Batida DJ',
+    magic: 'Magia e Brilhos',
+    action: 'Cena de Ação',
+    hyper: 'Hiper Cafeína',
     swirl: 'Giro'
   },
 

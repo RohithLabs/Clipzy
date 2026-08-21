@@ -1,0 +1,232 @@
+/* Number field styles */
+.number-field {
+  @apply flex flex-col gap-1;
+
+  &[data-invalid="true"],
+  &[aria-invalid="true"] {
+    [data-slot="description"] {
+      @apply hidden;
+    }
+  }
+
+  [data-slot="label"] {
+    @apply w-fit;
+  }
+}
+
+.number-field__group {
+  @apply grid h-9 items-center overflow-hidden rounded-field border bg-field text-sm text-field-foreground shadow-field outline-none;
+  border-width: var(--border-width-field);
+  border-color: var(--field-border);
+  grid-template-columns: 1fr;
+
+  &:has([slot="decrement"]) {
+    grid-template-columns: 40px 1fr;
+  }
+
+  &:has([slot="increment"]) {
+    grid-template-columns: 1fr 40px;
+  }
+
+  &:has([slot="decrement"]):has([slot="increment"]) {
+    grid-template-columns: 40px 1fr 40px;
+  }
+
+  /**
+   * Transitions
+   * CRITICAL: motion-reduce must be AFTER transition for correct override specificity
+   */
+  transition:
+    background-color 150ms var(--ease-smooth),
+    border-color 150ms var(--ease-smooth),
+    box-shadow 150ms var(--ease-out);
+  @apply motion-reduce:transition-none;
+
+  /* Hover state */
+  @media (hover: hover) {
+    &:hover:not(:focus-within),
+    &[data-hovered="true"]:not([data-focus-within="true"]) {
+      @apply bg-field-hover;
+      border-color: var(--field-border-hover);
+    }
+  }
+
+  /* Focus within state */
+  &[data-focus-within="true"],
+  &:focus-within {
+    @apply status-focused-field;
+    border-color: var(--field-border-focus);
+    background-color: var(--field-focus);
+  }
+
+  /* Invalid state */
+  &[data-invalid="true"] {
+    @apply status-invalid-field;
+    background-color: var(--field-focus);
+    border-color: var(--color-field-border-invalid);
+  }
+
+  /* Disabled state */
+  &[data-disabled="true"],
+  &[aria-disabled="true"] {
+    @apply status-disabled;
+  }
+
+  /**
+   * Browser autofill state.
+   * The user-agent paints `:-webkit-autofill`/`:autofill` on the inner <input>
+   * only. Because the input has its border-radius stripped on whichever side
+   * touches the increment/decrement buttons, the autofill highlight ends up
+   * as a sharp-cornered rectangle and the buttons receive no highlight.
+   * Lift the highlight onto the group so the rounded shell + buttons all
+   * share it. (Affects autofilled numeric fields, e.g. OTP/year inputs.)
+   */
+  &:has([data-slot="number-field-input"]:-webkit-autofill),
+  &:has([data-slot="number-field-input"]:autofill) {
+    background-color: var(--field-focus);
+    border-color: var(--field-border-focus);
+  }
+}
+
+.number-field__input {
+  @apply min-w-0 rounded-none border-0 bg-transparent px-3 py-2 text-base tabular-nums shadow-none outline-none sm:text-sm;
+
+  /* Remove border radius on left side when decrement button is present */
+  .number-field__group:has([slot="decrement"]) & {
+    @apply rounded-s-none;
+  }
+
+  /* Remove border radius on right side when increment button is present */
+  .number-field__group:has([slot="increment"]) & {
+    @apply rounded-e-none;
+  }
+
+  /* Focus state - handled by group */
+  &:focus,
+  &:focus-visible {
+    @apply outline-none;
+  }
+
+  /**
+   * Neutralize the browser's per-input autofill paint so the inner <input>
+   * doesn't draw a sharp-cornered yellow rectangle. The unified highlight
+   * is applied to `.number-field__group` above. Preserve the autofilled
+   * text and caret colors, and pin the background-color transition so the
+   * inset box-shadow trick doesn't flicker on state changes.
+   */
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active,
+  &:autofill {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset;
+    box-shadow: 0 0 0 1000px transparent inset;
+    -webkit-text-fill-color: var(--field-foreground);
+    caret-color: var(--field-foreground);
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
+
+.number-field__increment-button,
+.number-field__decrement-button {
+  @apply flex h-full w-10 items-center justify-center rounded-none bg-transparent text-field-foreground outline-none;
+  border-width: var(--border-width-field);
+  border-color: var(--field-border);
+  border-style: solid;
+
+  /**
+   * Transitions
+   * CRITICAL: motion-reduce must be AFTER transition for correct override specificity
+   */
+  transition:
+    background-color 150ms var(--ease-smooth),
+    border-color 150ms var(--ease-smooth);
+  @apply motion-reduce:transition-none;
+
+  /* Cursor */
+  cursor: var(--cursor-interactive);
+
+  /* Hover state */
+  &:hover,
+  &[data-hovered="true"] {
+  }
+
+  /* Focus visible state */
+  &:focus-visible:not(:focus),
+  &[data-focus-visible="true"] {
+  }
+
+  /* Pressed state */
+  &:active,
+  &[data-pressed="true"] {
+    @apply bg-field-foreground/10;
+    transform: scale(0.97);
+  }
+
+  /* Disabled state */
+  &:disabled,
+  &[data-disabled="true"],
+  &[aria-disabled="true"] {
+    @apply status-disabled;
+  }
+
+  /* Icon styling */
+  [data-slot="number-field-increment-button-icon"],
+  [data-slot="number-field-decrement-button-icon"] {
+    @apply size-4;
+  }
+}
+
+.number-field__increment-button {
+  @apply rounded-s-none rounded-e-field border-s border-field-placeholder/15;
+}
+
+.number-field__decrement-button {
+  @apply rounded-s-field rounded-e-none border-e border-field-placeholder/15;
+}
+
+/* Variant property definitions */
+.number-field--primary {
+  /* Default styles */
+}
+
+.number-field--secondary .number-field__group {
+  @apply shadow-none;
+  background-color: var(--number-field-group-bg);
+
+  --number-field-group-bg: var(--default);
+  --number-field-group-bg-hover: var(--default-hover);
+  --number-field-group-bg-focus: var(--default);
+
+  @media (hover: hover) {
+    &:hover:not(:focus-within),
+    &[data-hovered="true"]:not([data-focus-within="true"]) {
+      background-color: var(--number-field-group-bg-hover);
+    }
+  }
+
+  &:focus-within,
+  &[data-focus-within="true"] {
+    background-color: var(--number-field-group-bg-focus);
+  }
+
+  /* Invalid state */
+  &[data-invalid="true"] {
+    @apply status-invalid-field;
+    border-color: var(--color-field-border-invalid);
+    background-color: var(--number-field-group-bg-focus);
+  }
+
+  [data-slot="number-field-input"] {
+    @apply bg-transparent;
+  }
+}
+
+/* Full width modifier */
+.number-field--full-width {
+  @apply w-full;
+}
+
+.number-field__group--full-width {
+  @apply w-full;
+}

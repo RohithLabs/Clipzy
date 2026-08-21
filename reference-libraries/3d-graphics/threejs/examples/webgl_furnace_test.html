@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js white furnace test</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta property="og:title" content="three.js white furnace test">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://threejs.org/examples/webgl_furnace_test.html">
+		<meta property="og:image" content="https://threejs.org/examples/screenshots/webgl_furnace_test.jpg">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+	<body>
+
+		<div id="container">
+			<div id="info">
+				<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> -
+				<a href="https://google.github.io/filament/Filament.md.html#toc4.7.2" target="_blank" rel="noopener">White Furnace</a> energy conservation test by <a href="https://jsantell.com/" target="_blank" rel="noopener">Jordan Santell</a>
+				<br>Roughness increases left to right
+				<br>Metalness increases top to bottom
+			</div>
+		</div>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../build/three.module.js",
+					"three/addons/": "./jsm/"
+				}
+			}
+		</script>
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+			let scene, camera, renderer, radianceMap;
+
+			let gui;
+
+			const COLOR = 0xcccccc;
+
+			function init() {
+
+				const width = window.innerWidth;
+				const height = window.innerHeight;
+				const aspect = width / height;
+
+				// renderer
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setSize( width, height );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				document.body.appendChild( renderer.domElement );
+
+				// scene
+
+				scene = new THREE.Scene();
+
+				// camera
+				camera = new THREE.PerspectiveCamera( 40, aspect, 1, 30 );
+				camera.position.set( 0, 0, 18 );
+
+				//
+
+				initGui();
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			function createObjects() {
+
+				const geometry = new THREE.SphereGeometry( 0.4, 32, 16 );
+
+				for ( let x = 0; x <= 10; x ++ ) {
+
+					for ( let y = 0; y <= 10; y ++ ) {
+
+						const material = new THREE.MeshPhysicalMaterial( {
+							roughness: x / 10,
+							metalness: y / 10,
+							color: 0xffffff,
+							envMap: radianceMap,
+							envMapIntensity: 1,
+							transmission: 0,
+							ior: 1.5
+						} );
+
+						const mesh = new THREE.Mesh( geometry, material );
+						mesh.position.x = x - 5;
+						mesh.position.y = 5 - y;
+						scene.add( mesh );
+
+					}
+
+				}
+
+			}
+
+			function createEnvironment() {
+
+				const envScene = new THREE.Scene();
+				envScene.background = new THREE.Color( COLOR );
+
+				const pmremGenerator = new THREE.PMREMGenerator( renderer );
+				radianceMap = pmremGenerator.fromScene( envScene ).texture;
+				pmremGenerator.dispose();
+
+				scene.background = envScene.background;
+
+			}
+
+			function onWindowResize() {
+
+				const width = window.innerWidth;
+				const height = window.innerHeight;
+
+				camera.aspect = width / height;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( width, height );
+
+				render();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+			function initGui() {
+
+				gui = new GUI();
+
+				const param = {
+					'tint': false
+				};
+
+				gui.add( param, 'tint' ).name( 'Tint for Visibility' ).onChange( function ( val ) {
+
+					scene.traverse( function ( child ) {
+
+						const tint = val ? 0xccccff : 0xffffff;
+
+						if ( child.isMesh ) child.material.color.setHex( tint );
+
+					} );
+
+					render();
+
+				} );
+
+			}
+
+			Promise.resolve()
+				.then( init )
+				.then( createEnvironment )
+				.then( createObjects )
+				.then( render );
+
+		</script>
+	</body>
+</html>

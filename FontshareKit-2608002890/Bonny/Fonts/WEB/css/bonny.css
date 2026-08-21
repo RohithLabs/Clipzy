@@ -1,0 +1,22 @@
+/**
+* @license
+*
+* Font Family: Bonny
+* Designed by: Barbara Bigosinska
+* URL: https://www.fontshare.com/fonts/bonny
+* © 2026 Indian Type Foundry
+*
+* Bonny Medium 
+
+*
+*/
+@font-face {
+  font-family: 'Bonny-Medium';
+  src: url('../fonts/Bonny-Medium.woff2') format('woff2'),
+       url('../fonts/Bonny-Medium.woff') format('woff'),
+       url('../fonts/Bonny-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+

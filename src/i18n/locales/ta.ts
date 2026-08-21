@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const ta: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — அனிமேஷன் SVG அவதார்',
-    botAria: 'அனிமேஷன் செய்யப்பட்ட tibsy அவதார்'
+    name: 'clipzy',
+    title: 'clipzy — அனிமேஷன் அவதார் & ரீல்ஸ் ஸ்டுடியோ',
+    botAria: 'அனிமேஷன் செய்யப்பட்ட clipzy அவதார்'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const ta: typeof fr = {
     nav: 'பிரிவுகள்',
     customize: 'தனிப்பயனாக்கு',
     animations: 'அனிமேஷன்கள்',
+    combos: 'காம்போஸ் & கதை',
+    reel: 'ரீல் ஸ்டுடியோ',
     lab3d: '3D லேப்',
     settings: 'அமைப்புகள்'
   },
@@ -29,6 +31,10 @@ const ta: typeof fr = {
     nose: 'மூக்கு',
     cheeks: 'கன்னங்கள்',
     mouth: 'வாய்',
+    hats: 'தொப்பிகள் & கிரீடம்',
+    glasses: 'கண்ணாடிகள் & ஷேட்ஸ்',
+    props: 'பொருட்கள் & பாகங்கள்',
+    auras: 'ஒளிரும் ஒளிவட்டம் FX',
     color: 'நிறம்'
   },
 
@@ -59,7 +65,7 @@ const ta: typeof fr = {
     copieSvg: 'SVG நகலெடு',
     done: 'ஏற்றுமதி முடிந்தது',
     copied: 'நகலெடுக்கப்பட்டது',
-    failed: 'தோல்வியடைந்தது'
+    failed: 'ஏற்றுமதி தோல்வியடைந்தது'
   },
 
   preview: {
@@ -75,19 +81,19 @@ const ta: typeof fr = {
     export: 'ஏற்றுமதி செய்',
     zoom: 'ஜூம்',
     blockAria: '{state}, {duration}',
-    blockDurationAria: '{state} கால அளவு, {duration}',
+    blockDurationAria: '{state} நேரம், {duration}',
     blockRemoveAria: '{state} நீக்கு'
   },
 
   dialog: {
-    cancel: 'ரத்துசெய்',
-    nameCreateTitle: 'புதிய சுழற்சி',
+    cancel: 'ரத்து செய்',
+    nameCreateTitle: 'புதிய அனிமேஷன் வரிசை',
     nameRenameTitle: 'பெயர் மாற்று',
-    nameField: 'சுழற்சி பெயர்',
+    nameField: 'பெயர்',
     nameCreate: 'உருவாக்கு',
     nameRename: 'மாற்று',
     removeTitle: '"{name}" நீக்கவா?',
-    removeDetail: 'இந்த அனிமேஷன் வரிசை நீக்கப்படும். | இந்த {n} அனிமேஷன்கள் நீக்கப்படும்.',
+    removeDetail: 'இந்த அனிமேஷன் மற்றும் அதன் {n} பாகங்கள் நீக்கப்படும்.',
     removeConfirm: 'நீக்கு'
   },
 
@@ -137,6 +143,22 @@ const ta: typeof fr = {
     nope: 'மறுப்பு',
     hello: 'வணக்கம்',
     sleepy: 'தூக்கக் கலக்கம்',
+    power: 'மின்னல் சக்தி',
+    thuglife: 'தக் லைஃப்',
+    heart: 'காதல் துடிப்பு',
+    disco: 'டிஸ்கோ நடனம்',
+    glitch: 'சைபர் கிளிட்ச்',
+    vortex: 'விண்வெளி சுழல்',
+    ninja: 'நிஞ்சா மாயம்',
+    retro: '8-பிட் ரெட்ரோ',
+    rocket: 'ராக்கெட் பாய்ச்சல்',
+    freeze: 'பனி உறைவு',
+    dizzy: 'தலைச்சுற்றல் நட்சத்திரம்',
+    royal: 'ராஜ கிரீடம்',
+    djbeat: 'டிஜே பீட்',
+    magic: 'மந்திர பிரகாசம்',
+    action: 'சினிமா ஆக்ஷன்',
+    hyper: 'அதிவேக சுறுசுறுப்பு',
     swirl: 'சுழல்'
   },
 

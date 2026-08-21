@@ -12,9 +12,9 @@ import type fr from './fr'
  */
 const zh: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — 动画 SVG 头像',
-    botAria: 'tibsy 动画头像'
+    name: 'clipzy',
+    title: 'clipzy — 矢量动画头像与视频工坊',
+    botAria: 'clipzy 动画头像'
   },
 
   gallery: {
@@ -25,6 +25,8 @@ const zh: typeof fr = {
     nav: '版块',
     customize: '定制',
     animations: '动画',
+    combos: '连招 & 故事',
+    reel: 'Reel 短视频工坊',
     lab3d: '3D 工坊',
     settings: '设置'
   },
@@ -39,6 +41,10 @@ const zh: typeof fr = {
     nose: '鼻子',
     cheeks: '腮红',
     mouth: '嘴巴',
+    hats: '帽子 & 头饰',
+    glasses: '眼镜 & 护目镜',
+    props: '道具 & 随身物品',
+    auras: '光环 & 特效 FX',
     color: '颜色'
   },
 
@@ -58,12 +64,12 @@ const zh: typeof fr = {
     cycleProgress: '正在导出…',
     cycleReessayer: '重试',
     gifTitle: '下载 GIF 动图',
-    gifDetail: 'GIF 的透明只有全有或全无：不加背景时，球体边缘会略显生硬。',
+    gifDetail: 'GIF 透明度非黑即白：没有背景时，边缘会稍硬。',
     gifBackground: '背景',
-    fond_blanc: '白色背景',
-    fond_blanc_aide: '边缘平滑，适合浅色底',
+    fond_blanc: '白底',
+    fond_blanc_aide: '平滑边缘，适合浅色界面',
     fond_transparent: '透明背景',
-    fond_transparent_aide: '适配任何背景，边缘略硬',
+    fond_transparent_aide: '适应任何背景，边缘略硬',
     gifConfirm: '下载',
     copie: '复制图片',
     copieSvg: '复制 SVG',
@@ -79,49 +85,49 @@ const zh: typeof fr = {
 
   timeline: {
     play: '开始播放',
-    pause: '停止播放',
+    pause: '暂停播放',
     addAnimation: '添加动画',
     preview: '预览',
-    export: '导出动画序列',
+    export: '导出剪辑',
     zoom: '轨道缩放',
     blockAria: '{state}，{duration}',
-    blockDurationAria: '{state} 的时长，{duration}',
-    blockRemoveAria: '移除 {state}'
+    blockDurationAria: '{state}时长，{duration}',
+    blockRemoveAria: '移除{state}'
   },
 
   dialog: {
     cancel: '取消',
-    nameCreateTitle: '新建序列',
-    nameRenameTitle: '重命名序列',
-    nameField: '序列名称',
+    nameCreateTitle: '新建循环',
+    nameRenameTitle: '重命名循环',
+    nameField: '循环名称',
     nameCreate: '创建',
     nameRename: '重命名',
     removeTitle: '删除“{name}”？',
-    removeDetail: '该序列将被删除，其中包含的 {n} 个动画也将一并丢失。',
+    removeDetail: '将丢失此剪辑及其 {n} 个动画。',
     removeConfirm: '删除'
   },
 
   cycles: {
-    defaultName: '默认序列',
-    newName: '我的序列',
-    menuNew: '新建序列',
-    menuRenameAria: '重命名 {name}',
-    menuRemoveAria: '删除 {name}'
+    defaultName: '默认循环',
+    newName: '我的循环',
+    menuNew: '新建循环',
+    menuRenameAria: '重命名{name}',
+    menuRemoveAria: '删除{name}'
   },
 
   units: {
     seconds: '{n} 秒',
-    secondsShort: '{n}秒'
+    secondsShort: '{n}s'
   },
 
   settings: {
     title: '设置',
     language: '语言',
     about: '关于',
-    credits: '由 {name} 用 ❤️ 打造',
-    creditsAria: 'Jérémy 的 X 主页，在新标签页中打开',
-    github: '在 GitHub 上查看项目',
-    githubAria: '项目的 GitHub 仓库，在新标签页中打开'
+    credits: '由 {name} 倾心打造 ❤️',
+    creditsAria: '在 X 关注 Jérémy，新标签页打开',
+    github: '在 GitHub 查看项目',
+    githubAria: '项目 GitHub 仓库，新标签页打开'
   },
 
   states: {
@@ -147,6 +153,22 @@ const zh: typeof fr = {
     nope: '摇头',
     hello: '打招呼',
     sleepy: '困倦',
+    power: '能量爆发',
+    thuglife: '墨镜大佬',
+    heart: '爱心光波',
+    disco: '迪斯科热舞',
+    glitch: '赛博故障',
+    vortex: '星际涡流',
+    ninja: '影之忍者',
+    retro: '8位像素',
+    rocket: '火箭升空',
+    freeze: '冰冻结晶',
+    dizzy: '眼冒金星',
+    royal: '皇家皇冠',
+    djbeat: 'DJ 重低音',
+    magic: '魔法仙尘',
+    action: '电影分镜',
+    hyper: '咖啡因狂飙',
     swirl: '漩涡'
   },
 

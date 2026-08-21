@@ -1,0 +1,151 @@
+---
+title: Tooltip
+description: Displays informative text when users hover over or focus on an element
+icon: updated
+links:
+  rac: Tooltip
+  source: tooltip/tooltip.tsx
+  styles: tooltip.css
+  storybook: Components/Overlays/Tooltip
+  figma: true
+---
+
+## Usage
+
+```tsx
+import { Tooltip } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="tooltip-basic"
+/>
+
+## Anatomy
+
+```tsx
+import { Tooltip, Button } from '@heroui/react';
+
+export default () => (
+  <Tooltip>
+    <Tooltip.Trigger>
+      <Button>Hover for tooltip</Button>
+    </Tooltip.Trigger>
+    <Tooltip.Content>
+      <Tooltip.Arrow />
+      Helpful information about this element
+    </Tooltip.Content>
+  </Tooltip>
+)
+```
+
+## Examples
+
+### Placement
+
+<ComponentPreview
+  name="tooltip-placement"
+/>
+
+### With Arrow
+
+<ComponentPreview
+  name="tooltip-with-arrow"
+/>
+
+### Custom Triggers
+
+<ComponentPreview
+  name="tooltip-custom-trigger"
+/>
+
+### Render Function
+
+<ComponentPreview
+  name="tooltip-render-function"
+/>
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="tooltip-custom-styles" />
+
+### Global CSS
+
+To customize the Tooltip component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .tooltip {
+    @apply rounded-xl shadow-lg;
+  }
+
+  .tooltip__trigger {
+    @apply cursor-help;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Tooltip component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/tooltip.css)):
+
+#### Base Classes [!toc]
+- `.tooltip` - Base tooltip styles with animations
+- `.tooltip__trigger` - Trigger element styles
+
+### Interactive States
+
+The component supports animation states:
+
+- **Entering**: `[data-entering]` - Applied during tooltip appearance
+- **Exiting**: `[data-exiting]` - Applied during tooltip disappearance
+- **Placement**: `[data-placement="*"]` - Applied based on tooltip position
+
+## API Reference
+
+### Tooltip
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | Trigger element and content |
+| `delay` | `number` | `700` | Delay in milliseconds before showing tooltip |
+| `closeDelay` | `number` | `0` | Delay in milliseconds before hiding tooltip |
+| `trigger` | `"hover" \| "focus"` | `"hover"` | How the tooltip is triggered |
+| `isDisabled` | `boolean` | `false` | Whether the tooltip is disabled |
+| `shouldSkipAnimation` | `boolean` | `false` | Whether to skip the enter and exit animations when moving quickly from one tooltip to another |
+
+### Tooltip.Content
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | Content to display in the tooltip |
+| `showArrow` | `boolean` | `false` | Whether to show the arrow indicator |
+| `offset` | `number` | `3` (7 with arrow) | Distance from the trigger element |
+| `placement` | `"top" \| "bottom" \| "left" \| "right"` (and variants) | `"top"` | Placement of the tooltip |
+| `className` | `string` | - | Additional CSS classes |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, TooltipRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+### Tooltip.Trigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | Element that triggers the tooltip |
+| `className` | `string` | - | Additional CSS classes |
+
+### Tooltip.Arrow
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | Custom arrow element |
+| `className` | `string` | - | Additional CSS classes |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, OverlayArrowRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+## Related Components
+
+<RelatedComponents component="tooltip" />

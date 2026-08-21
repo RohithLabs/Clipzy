@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import TibsyInteractiveBot from './TibsyInteractiveBot.vue'
+import ClipzyInteractiveBot from './ClipzyInteractiveBot.vue'
 import BotTile from '@/components/BotTile.vue'
 import {
   FEATURE_SIZES,
@@ -17,6 +17,7 @@ import {
 import { SHAPES, type ShapeId } from '@/bot/skins'
 import type { IdleAnimationType, PhysicsAnimationType } from '@/ui/animation-system'
 import { t } from '@/i18n'
+import { sfx } from '@/audio/sfx'
 
 // Settings Bot Playground Controls
 const botColor = ref('#a855f7')
@@ -82,7 +83,7 @@ const PRESET_COLORS = [
 const copied = ref(false)
 function copyCode() {
   const code = `<template>
-  <TibsyInteractiveBot
+  <ClipzyInteractiveBot
     :size="${botSize.value}"
     color="${botColor.value}"
     shape="${botShape.value}"
@@ -98,10 +99,11 @@ function copyCode() {
 </template>
 
 <script setup>
-import TibsyInteractiveBot from '@/components/TibsyInteractiveBot.vue'
+import ClipzyInteractiveBot from '@/components/ClipzyInteractiveBot.vue'
 <\/script>`
 
   navigator.clipboard.writeText(code)
+  sfx.playChime()
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
 }
@@ -545,7 +547,7 @@ import TibsyInteractiveBot from '@/components/TibsyInteractiveBot.vue'
 
           <!-- Right Column: Live Bot Preview (Span 5) -->
           <div class="lg:col-span-5 flex flex-col items-center justify-center min-h-[440px] p-6 rounded-2xl bg-neutral-50/70 border border-[var(--line)]/60">
-            <TibsyInteractiveBot
+            <ClipzyInteractiveBot
               :size="botSize"
               :color="botColor"
               :shape="botShape"

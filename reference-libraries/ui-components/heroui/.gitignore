@@ -1,0 +1,95 @@
+# cache
+.turbo
+.cache
+.rollup.cache
+.swc
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+__snapshots__
+**/__screenshots__/
+**/.vitest-attachments/
+coverage.json
+
+# next.js
+.next
+out
+.vercel
+
+# production
+build
+dist
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# envs
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*
+.env*.local
+.env*.local
+.env*.staging
+.env*.production
+!.env.example
+
+# idea
+.idea
+
+# temporary
+.temp
+
+# fumadocs
+.source
+
+# content layer
+.contentlayer
+.content-collections
+
+# sitemaps
+sitemap*.xml
+
+# vite
+vite.config.ts.timestamp-*
+
+# storybook
+*storybook.log
+storybook-static
+
+# misc
+.DS_Store
+*.pem
+
+# bundle size reports
+bundle-sizes.json
+
+# clean-package backups
+.package.json.backup
+
+# Generated folder after running `pnpm pack`
+package
+
+storybook-static
+
+# Pre-built skill tarballs (generated during build)
+apps/docs/public/skills
+
+# SEO analysis output
+.seo-output

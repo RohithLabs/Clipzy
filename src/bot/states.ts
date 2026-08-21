@@ -9,9 +9,20 @@ import {
   NOTIF_MARGIN,
   NOTIF_POP,
   NOTIF_R,
+  POWER_ARCS,
   RINGS,
+  SVG_CROWN,
+  SVG_STAR,
   SWOOSH,
+  discoSparkles,
+  dizzyStars,
+  djEqualizerBars,
+  frostShards,
+  glitchPixels,
+  heartParticles,
   particles,
+  rocketPlume,
+  smokePoof,
   type ArcSpec,
   type DotRender
 } from './decor'
@@ -63,10 +74,17 @@ export interface Pose {
   dotsBehind: boolean
 }
 
-const pair = (w: number, h: number): [EyeCfg, EyeCfg] => [
-  { w, h, open: 1 },
-  { w, h, open: 1 }
+const pair = (w: number, h: number, tilt = 0): [EyeCfg, EyeCfg] => [
+  { w, h, open: 1, tilt },
+  { w, h, open: 1, tilt: -tilt }
 ]
+
+const eye = (w: number, h: number, tilt = 0, open = 1): EyeCfg => ({
+  w,
+  h,
+  tilt,
+  open
+})
 
 function base(over: Partial<Pose> = {}): Pose {
   return {
@@ -170,6 +188,22 @@ export type StateId =
   | 'nope'
   | 'hello'
   | 'sleepy'
+  | 'power'
+  | 'thuglife'
+  | 'heart'
+  | 'disco'
+  | 'glitch'
+  | 'vortex'
+  | 'ninja'
+  | 'retro'
+  | 'rocket'
+  | 'freeze'
+  | 'dizzy'
+  | 'royal'
+  | 'djbeat'
+  | 'magic'
+  | 'action'
+  | 'hyper'
   /** transition d'interface, pas une animation du catalogue : hors `SEQUENCE` */
   | 'swirl'
 
@@ -881,6 +915,324 @@ export const STATES: StateDef[] = [
         })
       }
     }
+  },
+
+  {
+    id: 'power',
+    duration: 2.5,
+    morph: 0.35,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const shake = Math.sin(t * 45) * 0.02
+      return base({
+        offX: shake,
+        offY: -0.06 + Math.cos(t * 30) * 0.02,
+        gaze: { yaw: 2, pitch: -16, roll: 0 },
+        eyes: pair(0.42, 0.58, -12),
+        arcs: POWER_ARCS.map((seed, i) => ({
+          id: `power-${i}`,
+          seed,
+          t,
+          opacity: 0.85 + 0.15 * Math.sin(t * 10 + i)
+        }))
+      })
+    }
+  },
+
+  {
+    id: 'thuglife',
+    duration: 2.8,
+    morph: 0.35,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const p = clamp(t / 2.8)
+      const lean = easings.easeOutCubic(clamp(p / 0.4))
+      return base({
+        offY: 0.04 * lean,
+        gaze: { yaw: -14 * lean, pitch: 4 * lean, roll: 8 * lean },
+        eyes: [eye(0.36, 0.18, 10), eye(0.32, 0.18, -6)],
+        dots: [
+          { x: -0.25, y: 0.35, r: 0.06 + 0.02 * Math.sin(t * 4), color: '#64748b', opacity: 0.5 },
+          { x: -0.42, y: 0.28, r: 0.08 + 0.02 * Math.cos(t * 4), color: '#94a3b8', opacity: 0.6 }
+        ]
+      })
+    }
+  },
+
+  {
+    id: 'heart',
+    duration: 2.6,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const beat = Math.pow(Math.sin(t * 6), 2)
+      return base({
+        sil: circle(1, { sx: 1 + 0.08 * beat, sy: 1 - 0.06 * beat }),
+        gaze: { yaw: 4, pitch: -12, roll: 0 },
+        eyes: pair(0.34, 0.36, 0),
+        dots: heartParticles(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'disco',
+    duration: 3.0,
+    morph: 0.35,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const hop = Math.abs(Math.sin(t * 6.5))
+      const rollAngle = 14 * Math.sin(t * 6.5)
+      return base({
+        offY: -0.16 * hop,
+        gaze: { yaw: 8 * Math.sin(t * 6.5), pitch: 6 - 12 * hop, roll: rollAngle },
+        eyes: pair(0.32, 0.44),
+        dots: discoSparkles(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'glitch',
+    duration: 2.2,
+    morph: 0.2,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const jx = Math.sin(t * 80) > 0.4 ? 0.07 : -0.07
+      const jy = Math.cos(t * 60) > 0.6 ? 0.04 : 0
+      return base({
+        offX: jx,
+        offY: jy,
+        gaze: { yaw: jx * 80, pitch: jy * 60, roll: jx * 50 },
+        eyes: [eye(0.38, 0.22, 15), eye(0.24, 0.48, -20)],
+        dots: glitchPixels(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'vortex',
+    duration: 2.8,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const s = 0.85 + 0.15 * Math.sin(t * 4)
+      return base({
+        sil: circle(1, { rot: t * 4, sx: s, sy: s }),
+        gaze: { yaw: 24 * Math.cos(t * 3), pitch: 18 * Math.sin(t * 3), roll: 12 * Math.sin(t * 4) },
+        eyes: pair(0.26, 0.38),
+        arcs: RINGS.slice(0, 3).map((seed, i) => ({
+          id: `vortex-${i}`,
+          seed: { ...seed, speed: 2.5 },
+          t,
+          opacity: 0.7
+        }))
+      })
+    }
+  },
+
+  {
+    id: 'ninja',
+    duration: 2.6,
+    morph: 0.35,
+    blinkIn: true,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const p = clamp(t / 2.6)
+      const crouch = Math.sin(p * Math.PI)
+      return base({
+        sil: circle(1, { sx: 1 + 0.2 * crouch, sy: 1 - 0.25 * crouch }),
+        offY: 0.15 * crouch,
+        gaze: { yaw: 12 * (p > 0.5 ? 1 : -1), pitch: 6, roll: 0 },
+        eyes: pair(0.42, 0.14, 25),
+        dots: smokePoof(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'retro',
+    duration: 2.4,
+    morph: 0.25,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const stepT = Math.floor(t * 8) / 8
+      const hop = Math.abs(Math.sin(stepT * 6))
+      return base({
+        offY: -0.12 * hop,
+        gaze: { yaw: 0, pitch: -6 * hop, roll: 0 },
+        eyes: pair(0.38, 0.38, 0),
+        dots: [
+          { x: 0.45, y: -0.65 - 0.1 * hop, r: 0.12, d: SVG_STAR, color: '#f59e0b', opacity: 0.9 }
+        ]
+      })
+    }
+  },
+
+  {
+    id: 'rocket',
+    duration: 2.6,
+    morph: 0.35,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const p = clamp(t / 2.6)
+      const lift = Math.sin(p * Math.PI)
+      const shake = Math.sin(t * 50) * 0.015
+      return base({
+        sil: circle(1, { sx: 0.85, sy: 1.25 }),
+        offX: shake,
+        offY: -0.25 * lift,
+        gaze: { yaw: 0, pitch: -20, roll: 0 },
+        eyes: pair(0.28, 0.5),
+        dots: rocketPlume(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'freeze',
+    duration: 2.6,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const shiver = Math.sin(t * 35) * 0.02
+      return base({
+        offX: shiver,
+        gaze: { yaw: 4, pitch: 0, roll: 0 },
+        eyes: pair(0.44, 0.44),
+        dots: frostShards(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'dizzy',
+    duration: 2.8,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      return base({
+        gaze: { yaw: 18 * Math.sin(t * 3), pitch: -10 + 8 * Math.cos(t * 3), roll: 14 * Math.sin(t * 3) },
+        eyes: [eye(0.24, 0.42, 15), eye(0.38, 0.2, -20)],
+        dots: dizzyStars(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'royal',
+    duration: 2.8,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      return base({
+        sil: circle(1, { sx: 1.08, sy: 1.12 }),
+        offY: -0.06,
+        gaze: { yaw: 4, pitch: 14, roll: 0 },
+        eyes: pair(0.32, 0.16, 16),
+        dots: [
+          { x: 0, y: -1.05 + 0.04 * Math.sin(t * 3), r: 0.32, d: SVG_CROWN, color: '#eab308', opacity: 0.95 }
+        ]
+      })
+    }
+  },
+
+  {
+    id: 'djbeat',
+    duration: 3.0,
+    morph: 0.3,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const bang = Math.abs(Math.sin(t * 7))
+      return base({
+        offY: 0.16 * bang,
+        gaze: { yaw: 0, pitch: 20 * bang, roll: 0 },
+        eyes: pair(0.32, 0.38),
+        dots: djEqualizerBars(t, 1)
+      })
+    }
+  },
+
+  {
+    id: 'magic',
+    duration: 2.6,
+    morph: 0.4,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      return base({
+        gaze: { yaw: 12 * Math.sin(t * 4), pitch: -8, roll: 10 * Math.sin(t * 4) },
+        eyes: [eye(0.38, 0.48), eye(0.3, 0.1)],
+        dots: [
+          { x: 0.55 * Math.cos(t * 4), y: -0.55 + 0.4 * Math.sin(t * 4), r: 0.12, d: SVG_STAR, color: '#a855f7', opacity: 0.9 },
+          { x: -0.45 * Math.sin(t * 3), y: -0.4 + 0.3 * Math.cos(t * 3), r: 0.08, d: SVG_STAR, color: '#38bdf8', opacity: 0.8 }
+        ]
+      })
+    }
+  },
+
+  {
+    id: 'action',
+    duration: 2.4,
+    morph: 0.35,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (_t) => {
+      return base({
+        sil: circle(1, { sx: 1.18, sy: 0.9 }),
+        gaze: { yaw: 0, pitch: 0, roll: 0 },
+        eyes: pair(0.24, 0.48),
+        dots: [
+          { x: 0, y: -0.9, r: 0.18, d: SVG_STAR, color: '#ef4444', opacity: 0.85 }
+        ]
+      })
+    }
+  },
+
+  {
+    id: 'hyper',
+    duration: 2.4,
+    morph: 0.3,
+    blinkIn: false,
+    baseFace: false,
+    baseBody: true,
+    pose: (t) => {
+      const jx = Math.sin(t * 55) * 0.035
+      const jy = Math.cos(t * 55) * 0.035
+      return base({
+        offX: jx,
+        offY: jy,
+        gaze: { yaw: jx * 120, pitch: jy * 120, roll: 0 },
+        eyes: pair(0.48, 0.52)
+      })
+    }
   }
 ]
 
@@ -915,7 +1267,23 @@ export const POSES: Record<StateId, number> = {
   nod: 0.4,
   nope: 0.35,
   hello: 0.45,
-  sleepy: 0.6
+  sleepy: 0.6,
+  power: 1.0,
+  thuglife: 1.2,
+  heart: 1.0,
+  disco: 1.2,
+  glitch: 0.8,
+  vortex: 1.2,
+  ninja: 1.0,
+  retro: 0.9,
+  rocket: 1.2,
+  freeze: 1.0,
+  dizzy: 1.2,
+  royal: 1.2,
+  djbeat: 1.2,
+  magic: 1.0,
+  action: 0.9,
+  hyper: 0.8
 }
 
 export const SEQUENCE: StateId[] = [
@@ -940,5 +1308,21 @@ export const SEQUENCE: StateId[] = [
   'nod',
   'nope',
   'hello',
-  'sleepy'
+  'sleepy',
+  'power',
+  'thuglife',
+  'heart',
+  'disco',
+  'glitch',
+  'vortex',
+  'ninja',
+  'retro',
+  'rocket',
+  'freeze',
+  'dizzy',
+  'royal',
+  'djbeat',
+  'magic',
+  'action',
+  'hyper'
 ]

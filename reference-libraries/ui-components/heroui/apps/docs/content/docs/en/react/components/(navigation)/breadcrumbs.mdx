@@ -1,0 +1,151 @@
+---
+title: Breadcrumbs
+description: Navigation breadcrumbs showing the current page's location within a hierarchy
+links:
+  rac: Breadcrumbs
+  source: breadcrumbs/breadcrumbs.tsx
+  styles: breadcrumbs.css
+  storybook: Components/Navigation/Breadcrumbs
+---
+
+## Usage
+
+```tsx
+import { Breadcrumbs } from '@heroui/react';
+```
+
+<ComponentPreview
+  name="breadcrumbs-basic"
+/>
+
+## Anatomy
+
+```tsx
+import { Breadcrumbs } from '@heroui/react';
+
+export default () => (
+  <Breadcrumbs>
+    <Breadcrumbs.Item href="#">Home</Breadcrumbs.Item>
+    <Breadcrumbs.Item href="#">Category</Breadcrumbs.Item>
+    <Breadcrumbs.Item>Current Page</Breadcrumbs.Item>
+  </Breadcrumbs>
+)
+```
+
+## Examples
+
+### Navigation Levels
+
+<ComponentPreview
+  name="breadcrumbs-level-2"
+/>
+
+<ComponentPreview
+  name="breadcrumbs-level-3"
+/>
+
+### Disabled State
+
+<ComponentPreview
+  name="breadcrumbs-disabled"
+/>
+
+### Custom Separator
+
+<ComponentPreview
+  name="breadcrumbs-custom-separator"
+/>
+
+### Render Function
+
+<ComponentPreview
+  name="breadcrumbs-render-function"
+/>
+
+## Customization
+
+### Tailwind CSS
+
+<ComponentPreview name="breadcrumbs-custom-styles" />
+
+### Global CSS
+
+To customize the Breadcrumbs component classes, you can use the `@layer components` directive.
+[Learn more](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes).
+
+```css
+@layer components {
+  .breadcrumbs {
+    @apply gap-4 text-lg;
+  }
+
+  .breadcrumbs__link {
+    @apply font-semibold;
+  }
+
+  .breadcrumbs__separator {
+    @apply text-blue-500;
+  }
+}
+```
+
+## Styling Reference
+
+HeroUI follows the [BEM](https://getbem.com/) methodology to ensure component variants and states are reusable and easy to customize.
+
+### CSS Classes
+
+The Breadcrumbs component uses these CSS classes ([View source styles](https://github.com/heroui-inc/heroui/blob/v3/packages/styles/components/breadcrumbs.css)):
+
+#### Base Classes [!toc]
+- `.breadcrumbs` - Base breadcrumbs container
+- `.breadcrumbs__item` - Individual breadcrumb item wrapper
+- `.breadcrumbs__link` - Breadcrumb link element
+- `.breadcrumbs__separator` - Separator icon between items
+
+#### State Classes [!toc]
+- `.breadcrumbs__link[data-current="true"]` - Current page indicator (not a link)
+
+### Interactive States
+
+The component supports both CSS pseudo-classes and data attributes for flexibility:
+
+- **Current**: `[data-current="true"]` on link (indicates current page)
+- **Hover**: Link elements support standard hover states
+- **Disabled**: `isDisabled` prop disables all links
+
+## API Reference
+
+### Breadcrumbs
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `separator` | `ReactNode` | chevron-right icon | Custom separator between breadcrumb items |
+| `isDisabled` | `boolean` | `false` | Whether all breadcrumb links are disabled |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The breadcrumb items |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, undefined>` | - | Overrides the default DOM element with a custom render function.|
+
+### Breadcrumbs.Item
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | - | The URL to link to (omit for current page) |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode \| RenderFunction` | - | Item content or render function |
+| `render` | `DOMRenderFunction<keyof React.JSX.IntrinsicElements, BreadcrumbRenderProps>` | - | Overrides the default DOM element with a custom render function.|
+
+## Accessibility
+
+Breadcrumbs uses React Aria Components' Breadcrumbs primitive, which provides:
+
+- Proper ARIA attributes for navigation landmarks
+- Current page indication via `aria-current="page"`
+- Keyboard navigation support
+- Screen reader announcements for navigation context
+
+The last breadcrumb item (without `href`) automatically becomes the current page indicator.
+
+## Related Components
+
+<RelatedComponents component="breadcrumbs" />

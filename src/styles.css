@@ -54,6 +54,9 @@ html,
 body,
 #app {
   height: 100%;
+  font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /*
@@ -177,7 +180,7 @@ body,
    * de « BLOUB » en cadratins a ce poids et cet interlettrage — mesuree, pas
    * estimee — et le reste est la marge qu'on lui laisse a droite.
    */
-  font-size: clamp(80px, calc((100vw - 7rem) / 3.05), 268px);
+  font-size: clamp(70px, calc((100vw - 7rem) / 3.8), 240px);
   font-weight: 900;
   letter-spacing: -0.045em;
   /*

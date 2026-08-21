@@ -1,0 +1,124 @@
+/* Base container */
+.input-otp {
+  @apply relative flex w-full items-center gap-2;
+
+  &[data-disabled="true"] {
+    @apply cursor-not-allowed opacity-50;
+  }
+}
+
+/* Group - slots separated with gap */
+.input-otp__group {
+  @apply flex min-w-0 items-center gap-2;
+}
+
+/* Individual slot box - fully rounded, standalone */
+.input-otp__slot {
+  @apply relative flex h-10 w-9.5 min-w-0 flex-1 items-center justify-center;
+  @apply border bg-field text-field-foreground shadow-field;
+  @apply rounded-field text-sm font-semibold outline-none;
+
+  border-width: var(--border-width-field);
+  border-color: var(--field-border);
+
+  /**
+   * Transitions
+   * CRITICAL: motion-reduce must be AFTER transition for correct override specificity
+   */
+  transition:
+    background-color 150ms var(--ease-smooth),
+    border-color 150ms var(--ease-smooth),
+    box-shadow 150ms var(--ease-out);
+  @apply motion-reduce:transition-none;
+
+  /* Hover */
+  @media (hover: hover) {
+    &:hover,
+    &[data-hovered="true"] {
+      @apply bg-field-hover;
+      border-color: var(--field-border-hover);
+    }
+  }
+
+  /* Active/Focus */
+  &[data-active="true"] {
+    @apply z-10 bg-field-focus status-focused-field;
+  }
+
+  /* Filled */
+  &[data-filled="true"] {
+    @apply bg-field-focus;
+  }
+
+  /* Disabled */
+  &[data-disabled="true"] {
+    @apply status-disabled;
+  }
+
+  /* Invalid */
+  &[data-invalid="true"] {
+    @apply status-invalid-field;
+    background-color: var(--field-focus);
+  }
+}
+
+/* Slot value */
+.input-otp__slot-value {
+  @apply text-lg leading-6 tracking-[-0.27px];
+
+  /**
+   * Animations
+   * CRITICAL: motion-reduce must be AFTER animation for correct override specificity
+   */
+  animation: slot-value-in 250ms var(--ease-smooth) both;
+  transform-origin: bottom center;
+  @apply motion-reduce:animate-none;
+}
+
+/* Caret */
+.input-otp__caret {
+  @apply absolute h-4 w-[2px] animate-caret-blink rounded-sm bg-field-placeholder;
+}
+
+/* Separator */
+.input-otp__separator {
+  @apply h-[2px] w-[6px] shrink-0 rounded-sm bg-separator;
+}
+
+/* Variant property definitions */
+.input-otp--primary {
+  /* Default styles */
+}
+
+.input-otp--secondary .input-otp__slot {
+  @apply shadow-none;
+  background-color: var(--input-otp-slot-bg);
+
+  --input-otp-slot-bg: var(--default);
+  --input-otp-slot-bg-hover: var(--default-hover);
+  --input-otp-slot-bg-focus: var(--default);
+
+  @media (hover: hover) {
+    &:hover,
+    &[data-hovered="true"] {
+      background-color: var(--input-otp-slot-bg-hover);
+    }
+  }
+
+  &[data-active="true"],
+  &[data-filled="true"] {
+    background-color: var(--input-otp-slot-bg-focus);
+  }
+}
+
+/* Animations */
+@keyframes slot-value-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "lenis-vue",
+  "type": "module",
+  "devDependencies": {
+    "vue": "^3.5.13"
+  }
+}

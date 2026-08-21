@@ -2,9 +2,9 @@ import type fr from './fr'
 
 const it: typeof fr = {
   app: {
-    name: 'tibsy',
-    title: 'tibsy — avatar SVG animato',
-    botAria: 'Avatar animato tibsy'
+    name: 'clipzy',
+    title: 'clipzy — avatar vettoriale e studio video animato',
+    botAria: 'Avatar animato clipzy'
   },
 
   gallery: {
@@ -15,6 +15,8 @@ const it: typeof fr = {
     nav: 'Sezioni',
     customize: 'Personalizza',
     animations: 'Animazioni',
+    combos: 'Combo & Storia',
+    reel: 'Studio Reel',
     lab3d: 'Laboratorio 3D',
     settings: 'Impostazioni'
   },
@@ -29,6 +31,10 @@ const it: typeof fr = {
     nose: 'Naso',
     cheeks: 'Guance',
     mouth: 'Bocca',
+    hats: 'Cappelli e Copricapi',
+    glasses: 'Occhiali e Visiere',
+    props: 'Accessori e Oggetti',
+    auras: 'Aura ed Effetti FX',
     color: 'Colore'
   },
 
@@ -83,7 +89,7 @@ const it: typeof fr = {
     cancel: 'Annulla',
     nameCreateTitle: 'Nuovo ciclo',
     nameRenameTitle: 'Rinomina ciclo',
-    nameField: 'Nome ciclo',
+    nameField: 'Nome del ciclo',
     nameCreate: 'Crea',
     nameRename: 'Rinomina',
     removeTitle: 'Eliminare "{name}"?',
@@ -110,23 +116,23 @@ const it: typeof fr = {
     language: 'Lingua',
     about: 'Informazioni',
     credits: 'Creato con ❤️ da {name}',
-    creditsAria: 'Creatori del progetto',
+    creditsAria: 'Jérémy su X, apre in una nuova scheda',
     github: 'Vedi il progetto su GitHub',
-    githubAria: 'Repository del progetto su GitHub'
+    githubAria: 'Repository del progetto su GitHub, apre in una nuova scheda'
   },
 
   states: {
     idle: 'Riposo',
     thinking: 'Pensieroso',
     wink: 'Occhiolino',
-    wide: 'Occhi sgranati',
+    wide: 'Occhi spalancati',
     alert: 'Allerta',
     notify: 'Notifica',
     exclaim: 'Esclamazione',
-    sleep: 'Dormire',
+    sleep: 'Dormiente',
     egg: 'Uovo',
     hexagon: 'Esagono',
-    play: 'Giocare',
+    play: 'Riproduci',
     orbit: 'Orbita',
     burst: 'Scoppio',
     comet: 'Cometa',
@@ -138,6 +144,22 @@ const it: typeof fr = {
     nope: 'Negare',
     hello: 'Ciao',
     sleepy: 'Assonnato',
+    power: 'Super Potenza',
+    thuglife: 'Thug Life',
+    heart: 'Battito Cuore',
+    disco: 'Danza Disco',
+    glitch: 'Glitch Cyber',
+    vortex: 'Vortice Spaziale',
+    ninja: 'Ninja Furtivo',
+    retro: 'Retrò 8-Bit',
+    rocket: 'Decollo Razzo',
+    freeze: 'Gelo Glaciale',
+    dizzy: 'Stelle e Vertigini',
+    royal: 'Corona Reale',
+    djbeat: 'Ritmo DJ',
+    magic: 'Magia e Faville',
+    action: 'Scena d’Azione',
+    hyper: 'Iper Caffeina',
     swirl: 'Vortice'
   },
 
